@@ -1,0 +1,3994 @@
+{
+  "Formulas": [
+    {
+      "FormulaId": "22222222-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "22222222-0001-0000-0000-000000000001",
+          "FormulaId": "22222222-0000-0000-0000-000000000001",
+          "Label": "ConceptFilter",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ConceptFilter\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "22222222-0001-0000-0000-000000000003",
+          "FormulaId": "22222222-0000-0000-0000-000000000001",
+          "Label": "GroupByPolygon",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"PolygonCodeH3R12\"}"
+        },
+        {
+          "Id": "22222222-0001-0000-0000-000000000002",
+          "FormulaId": "22222222-0000-0000-0000-000000000001",
+          "Label": "FilterByConcept",
+          "NodeKind": "Filter",
+          "NodeData": "{\"FilterExpression\":\"item.Concept == param.ConceptFilter\"}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "22222222-0003-0000-0000-000000000001",
+          "FormulaId": "22222222-0000-0000-0000-000000000001",
+          "FromNodeId": "22222222-0001-0000-0000-000000000001",
+          "ToNodeId": "22222222-0001-0000-0000-000000000002",
+          "Order": 1
+        },
+        {
+          "Id": "22222222-0003-0000-0000-000000000002",
+          "FormulaId": "22222222-0000-0000-0000-000000000001",
+          "FromNodeId": "22222222-0001-0000-0000-000000000002",
+          "ToNodeId": "22222222-0001-0000-0000-000000000003",
+          "Order": 0
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "22222222-0002-0000-0000-000000000001",
+          "FormulaId": "22222222-0000-0000-0000-000000000001",
+          "ParameterName": "ConceptFilter",
+          "ValueType": "string",
+          "Description": "Concept name to filter by"
+        }
+      ]
+    },
+    {
+      "FormulaId": "11111111-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "11111111-0001-0000-0000-000000000001",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "PayableItems",
+          "NodeKind": "VariableInput",
+          "NodeData": "{\"DataSource\":\"PayableItem\",\"FieldName\":\"Type\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000003",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "ConceptPrice",
+          "NodeKind": "VariableInput",
+          "NodeData": "{\"DataSource\":\"Price\",\"FieldName\":\"Price\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000004",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "DecimalRoundingScale",
+          "NodeKind": "ConstantInput",
+          "NodeData": "{\"ConstantName\":\"Scale\",\"Value\":\"2\",\"ValueType\":\"int\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000002",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "ContainerTypeName",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ContainerTypeName\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000007",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "MultiplyQuantityByPrice",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000008",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "RoundResult",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Round\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000006",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "GroupByConcept",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"Concept\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000005",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "FilterByContainerType",
+          "NodeKind": "Filter",
+          "NodeData": "{\"FilterExpression\":\"item.Type == param.ContainerTypeName\"}"
+        },
+        {
+          "Id": "11111111-0001-0000-0000-000000000009",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "Label": "Result",
+          "NodeKind": "Output",
+          "NodeData": "{}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "11111111-0003-0000-0000-000000000001",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000001",
+          "ToNodeId": "11111111-0001-0000-0000-000000000005",
+          "Order": 0
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000002",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000002",
+          "ToNodeId": "11111111-0001-0000-0000-000000000005",
+          "Order": 1
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000003",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000005",
+          "ToNodeId": "11111111-0001-0000-0000-000000000006",
+          "Order": 0
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000004",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000006",
+          "ToNodeId": "11111111-0001-0000-0000-000000000007",
+          "Order": 0
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000005",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000003",
+          "ToNodeId": "11111111-0001-0000-0000-000000000007",
+          "Order": 1
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000006",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000007",
+          "ToNodeId": "11111111-0001-0000-0000-000000000008",
+          "Order": 0
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000007",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000004",
+          "ToNodeId": "11111111-0001-0000-0000-000000000008",
+          "Order": 1
+        },
+        {
+          "Id": "11111111-0003-0000-0000-000000000008",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "FromNodeId": "11111111-0001-0000-0000-000000000008",
+          "ToNodeId": "11111111-0001-0000-0000-000000000009",
+          "Order": 0
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "11111111-0002-0000-0000-000000000001",
+          "FormulaId": "11111111-0000-0000-0000-000000000001",
+          "ParameterName": "ContainerTypeName",
+          "ValueType": "string",
+          "Description": "Container type to filter, e.g. B2C"
+        }
+      ]
+    },
+    {
+      "FormulaId": "77777777-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "77777777-0001-0000-0000-000000000001",
+          "FormulaId": "77777777-0000-0000-0000-000000000001",
+          "Label": "FiltroConcepto",
+          "NodeKind": "Filter",
+          "NodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        }
+      ]
+    },
+    {
+      "FormulaId": "55555555-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "55555555-0001-0000-0000-000000000001",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Items",
+          "NodeKind": "VariableInput",
+          "NodeData": "{\"DataSource\":\"PayableItem\",\"FieldName\":\"DistanceToRouting\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000009",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Tarifa0a30",
+          "NodeKind": "ConstantInput",
+          "NodeData": "{\"ConstantName\":\"Tarifa0a30\",\"Value\":\"6000\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000010",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Tarifa30a60",
+          "NodeKind": "ConstantInput",
+          "NodeData": "{\"ConstantName\":\"Tarifa30a60\",\"Value\":\"10000\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000011",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Tarifa60a90000",
+          "NodeKind": "ConstantInput",
+          "NodeData": "{\"ConstantName\":\"Tarifa60a90000\",\"Value\":\"15000\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000008",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "ContadorItems",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"VehicleDomain\",\"Aggregation\":\"Count\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000012",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "MultRadio0a30",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000013",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "MultRadio30a60",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000014",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "MultRadio60a90000",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000005",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "GrupoRadio0a30",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"VehicleDomain\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000006",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "GrupoRadio30a60",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"VehicleDomain\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000007",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "GrupoRadio60a90000",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"VehicleDomain\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000015",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "ConcatRadios",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"Concat\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000016",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "TotalGeneral",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000002",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Radio0a30",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"SegmentoRadio\",\"EntryNodeId\":\"44444444-0001-0000-0000-000000000003\",\"ExitNodeId\":\"44444444-0001-0000-0000-000000000003\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000003",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Radio30a60",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"SegmentoRadio\",\"EntryNodeId\":\"44444444-0001-0000-0000-000000000003\",\"ExitNodeId\":\"44444444-0001-0000-0000-000000000003\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000004",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Radio60a90000",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"SegmentoRadio\",\"EntryNodeId\":\"44444444-0001-0000-0000-000000000003\",\"ExitNodeId\":\"44444444-0001-0000-0000-000000000003\"}"
+        },
+        {
+          "Id": "55555555-0001-0000-0000-000000000017",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "Label": "Result",
+          "NodeKind": "Output",
+          "NodeData": "{}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "55555555-0003-0000-0000-000000000001",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000001",
+          "ToNodeId": "55555555-0001-0000-0000-000000000002",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000002",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000002",
+          "ToNodeId": "55555555-0001-0000-0000-000000000005",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000003",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000005",
+          "ToNodeId": "55555555-0001-0000-0000-000000000012",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000004",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000008",
+          "ToNodeId": "55555555-0001-0000-0000-000000000012",
+          "Order": 1
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000005",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000009",
+          "ToNodeId": "55555555-0001-0000-0000-000000000012",
+          "Order": 2
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000006",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000001",
+          "ToNodeId": "55555555-0001-0000-0000-000000000003",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000007",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000003",
+          "ToNodeId": "55555555-0001-0000-0000-000000000006",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000008",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000006",
+          "ToNodeId": "55555555-0001-0000-0000-000000000013",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000009",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000008",
+          "ToNodeId": "55555555-0001-0000-0000-000000000013",
+          "Order": 1
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000010",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000010",
+          "ToNodeId": "55555555-0001-0000-0000-000000000013",
+          "Order": 2
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000011",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000001",
+          "ToNodeId": "55555555-0001-0000-0000-000000000004",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000012",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000004",
+          "ToNodeId": "55555555-0001-0000-0000-000000000007",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000013",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000007",
+          "ToNodeId": "55555555-0001-0000-0000-000000000014",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000014",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000008",
+          "ToNodeId": "55555555-0001-0000-0000-000000000014",
+          "Order": 1
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000015",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000011",
+          "ToNodeId": "55555555-0001-0000-0000-000000000014",
+          "Order": 2
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000016",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000012",
+          "ToNodeId": "55555555-0001-0000-0000-000000000015",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000017",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000013",
+          "ToNodeId": "55555555-0001-0000-0000-000000000015",
+          "Order": 1
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000018",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000014",
+          "ToNodeId": "55555555-0001-0000-0000-000000000015",
+          "Order": 2
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000019",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000015",
+          "ToNodeId": "55555555-0001-0000-0000-000000000016",
+          "Order": 0
+        },
+        {
+          "Id": "55555555-0003-0000-0000-000000000020",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "FromNodeId": "55555555-0001-0000-0000-000000000016",
+          "ToNodeId": "55555555-0001-0000-0000-000000000017",
+          "Order": 0
+        }
+      ],
+      "CompositeEdgeMembers": [
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000002",
+          "MemberEdgeId": "44444444-0003-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000002",
+          "MemberEdgeId": "44444444-0003-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000003",
+          "MemberEdgeId": "44444444-0003-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000003",
+          "MemberEdgeId": "44444444-0003-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000004",
+          "MemberEdgeId": "44444444-0003-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000004",
+          "MemberEdgeId": "44444444-0003-0000-0000-000000000002"
+        }
+      ],
+      "CompositeNodeMembers": [
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000002",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000002",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000002",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000003"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000003",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000003",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000003",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000003"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000004",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000004",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "55555555-0001-0000-0000-000000000004",
+          "MemberNodeId": "44444444-0001-0000-0000-000000000003"
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "55555555-0002-0000-0000-000000000001",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "ParameterName": "Radio0a30.LowerBound",
+          "ValueType": "decimal",
+          "Description": "Radio 0-30: límite inferior"
+        },
+        {
+          "Id": "55555555-0002-0000-0000-000000000002",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "ParameterName": "Radio0a30.UpperBound",
+          "ValueType": "decimal",
+          "Description": "Radio 0-30: límite superior"
+        },
+        {
+          "Id": "55555555-0002-0000-0000-000000000003",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "ParameterName": "Radio30a60.LowerBound",
+          "ValueType": "decimal",
+          "Description": "Radio 30-60: límite inferior"
+        },
+        {
+          "Id": "55555555-0002-0000-0000-000000000004",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "ParameterName": "Radio30a60.UpperBound",
+          "ValueType": "decimal",
+          "Description": "Radio 30-60: límite superior"
+        },
+        {
+          "Id": "55555555-0002-0000-0000-000000000005",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "ParameterName": "Radio60a90000.LowerBound",
+          "ValueType": "decimal",
+          "Description": "Radio 60-90000: límite inferior"
+        },
+        {
+          "Id": "55555555-0002-0000-0000-000000000006",
+          "FormulaId": "55555555-0000-0000-0000-000000000001",
+          "ParameterName": "Radio60a90000.UpperBound",
+          "ValueType": "decimal",
+          "Description": "Radio 60-90000: límite superior"
+        }
+      ]
+    },
+    {
+      "FormulaId": "88888888-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "88888888-0000-0001-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Items",
+          "NodeKind": "VariableInput",
+          "NodeData": "{\"DataSource\":\"PayableItem\",\"FieldName\":\"WeightValue\"}"
+        },
+        {
+          "Id": "88888888-0401-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0501-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0601-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0701-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0801-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0901-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A01-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0402-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0502-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0602-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0702-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0802-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0902-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A02-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0403-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0503-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0603-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0703-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0803-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0903-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A03-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0404-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0504-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0604-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0704-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0804-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0904-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A04-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0405-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0505-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0605-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0705-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0805-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0905-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A05-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0406-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0506-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0606-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0706-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0806-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0906-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A06-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0407-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0507-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0607-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0707-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0807-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0907-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A07-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0408-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0508-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0608-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0708-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0808-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0908-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A08-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0409-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0509-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0609-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0709-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0809-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0909-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A09-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-040A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-050A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-060A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-070A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-080A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-090A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A0A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-040B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-050B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-060B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-070B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-080B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-090B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A0B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-040C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-050C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-060C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-070C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-080C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-090C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A0C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-040D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-050D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-060D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-070D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-080D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-090D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A0D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-040E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-050E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-060E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-070E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-080E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-090E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A0E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-040F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-050F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-060F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-070F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-080F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-090F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A0F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0410-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0510-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0610-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0710-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0810-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0910-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A10-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0411-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_PrecioBase",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_PrecioBase\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0511-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_L1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_L1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0611-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_P1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_P1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0711-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_L2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_L2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0811-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_P2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_P2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0911-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_L3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_L3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0A11-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C_P3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C_P3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "88888888-0301-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_ENCOMIENDAS",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0302-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_RECAMBIO",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0303-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_ENCOMIENDA_CORPORATIVA",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0304-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_ENCOMIENDA_INTERNACIONAL",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0305-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_INFORME_RENDICION",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0306-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_BOLSINES",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Count\"}"
+        },
+        {
+          "Id": "88888888-0307-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_BODEGAS",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Count\"}"
+        },
+        {
+          "Id": "88888888-0308-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_VENTA_DIRECTA",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Count\"}"
+        },
+        {
+          "Id": "88888888-0309-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_SERVICIO_FINANCIERO",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-030A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_MENSAJERIA_VIP",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-030B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_CAJA_PACK",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-030C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_MENSAJERIA_SIMPLE",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-030D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_DOCUMENTO_ANDREANI",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-030E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_ENCOMIENDA_GC",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-030F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_GESTIONES",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0310-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_GESTIONES_PORTABILIDAD",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0311-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Qty_RETIRO_B2C",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "88888888-0B01-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_ENCOMIENDAS",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B02-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_RECAMBIO",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B03-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_ENCOMIENDA_CORPORATIVA",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B04-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_ENCOMIENDA_INTERNACIONAL",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B05-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_INFORME_RENDICION",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B06-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_BOLSINES",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B07-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_BODEGAS",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B08-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_VENTA_DIRECTA",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B09-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_SERVICIO_FINANCIERO",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B0A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_MENSAJERIA_VIP",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B0B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_CAJA_PACK",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B0C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_MENSAJERIA_SIMPLE",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B0D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_DOCUMENTO_ANDREANI",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B0E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_ENCOMIENDA_GC",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B0F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_GESTIONES",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B10-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_GESTIONES_PORTABILIDAD",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0B11-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Precio_RETIRO_B2C",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"SegmentedPriceByGroup\"}"
+        },
+        {
+          "Id": "88888888-0201-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_ENCOMIENDAS",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0202-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_RECAMBIO",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0203-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_ENCOMIENDA_CORPORATIVA",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0204-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_ENCOMIENDA_INTERNACIONAL",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0205-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_INFORME_RENDICION",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0206-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_BOLSINES",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0207-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_BODEGAS",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0208-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_VENTA_DIRECTA",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0209-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_SERVICIO_FINANCIERO",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-020A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_MENSAJERIA_VIP",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-020B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_CAJA_PACK",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-020C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_MENSAJERIA_SIMPLE",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-020D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_DOCUMENTO_ANDREANI",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-020E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_ENCOMIENDA_GC",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-020F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_GESTIONES",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0210-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_GESTIONES_PORTABILIDAD",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0211-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Grp_RETIRO_B2C",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"ContainerId\"}"
+        },
+        {
+          "Id": "88888888-0C01-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_ENCOMIENDAS",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C02-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_RECAMBIO",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C03-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_ENCOMIENDA_CORPORATIVA",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C04-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_ENCOMIENDA_INTERNACIONAL",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C05-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_INFORME_RENDICION",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C06-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_BOLSINES",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C07-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_BODEGAS",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C08-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_VENTA_DIRECTA",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C09-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_SERVICIO_FINANCIERO",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C0A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_MENSAJERIA_VIP",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C0B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_CAJA_PACK",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C0C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_MENSAJERIA_SIMPLE",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C0D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_DOCUMENTO_ANDREANI",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C0E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_ENCOMIENDA_GC",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C0F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_GESTIONES",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C10-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_GESTIONES_PORTABILIDAD",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0C11-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Reduce_RETIRO_B2C",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0000-0002-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ConcatGrupos",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"Concat\"}"
+        },
+        {
+          "Id": "88888888-0000-0003-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "TotalGeneral",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "88888888-0101-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0102-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0103-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0104-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0105-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0106-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0107-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0108-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0109-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-010A-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-010B-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-010C-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-010D-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-010E-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-010F-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0110-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0111-0000-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"77777777-0001-0000-0000-000000000001\",\"ExitNodeId\":\"77777777-0001-0000-0000-000000000001\"}"
+        },
+        {
+          "Id": "88888888-0000-0004-0000-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "Result",
+          "NodeKind": "Output",
+          "NodeData": "{}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "88888888-FE00-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0000-0002-0000-000000000001",
+          "ToNodeId": "88888888-0B0D-0000-0000-000000000001",
+          "Order": 5
+        },
+        {
+          "Id": "88888888-F90D-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-080D-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0D-0000-0000-000000000001",
+          "Order": 6
+        },
+        {
+          "Id": "88888888-FA0D-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-090D-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0D-0000-0000-000000000001",
+          "Order": 7
+        },
+        {
+          "Id": "88888888-FB0D-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0A0D-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0D-0000-0000-000000000001",
+          "Order": 8
+        },
+        {
+          "Id": "88888888-FC0D-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0B0D-0000-0000-000000000001",
+          "ToNodeId": "88888888-0C0D-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-FD0D-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0C0D-0000-0000-000000000001",
+          "ToNodeId": "88888888-0000-0002-0000-000000000001",
+          "Order": 12
+        },
+        {
+          "Id": "88888888-F10E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0000-0001-0000-000000000001",
+          "ToNodeId": "88888888-010E-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F20E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-010E-0000-0000-000000000001",
+          "ToNodeId": "88888888-020E-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F30E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-020E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F40E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-030E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 1
+        },
+        {
+          "Id": "88888888-F50E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-040E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 2
+        },
+        {
+          "Id": "88888888-F60E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-050E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 3
+        },
+        {
+          "Id": "88888888-F70E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-060E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 4
+        },
+        {
+          "Id": "88888888-F80E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-070E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 5
+        },
+        {
+          "Id": "88888888-F90E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-080E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 6
+        },
+        {
+          "Id": "88888888-FA0E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-090E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 7
+        },
+        {
+          "Id": "88888888-FB0E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0A0E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "Order": 8
+        },
+        {
+          "Id": "88888888-FC0E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0B0E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0C0E-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-FD0E-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0C0E-0000-0000-000000000001",
+          "ToNodeId": "88888888-0000-0002-0000-000000000001",
+          "Order": 13
+        },
+        {
+          "Id": "88888888-F10F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0000-0001-0000-000000000001",
+          "ToNodeId": "88888888-010F-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F20F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-010F-0000-0000-000000000001",
+          "ToNodeId": "88888888-020F-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F30F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-020F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F40F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-030F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 1
+        },
+        {
+          "Id": "88888888-F50F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-040F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 2
+        },
+        {
+          "Id": "88888888-F60F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-050F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 3
+        },
+        {
+          "Id": "88888888-F70F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-060F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 4
+        },
+        {
+          "Id": "88888888-F80F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-070F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 5
+        },
+        {
+          "Id": "88888888-F90F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-080F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 6
+        },
+        {
+          "Id": "88888888-FA0F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-090F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 7
+        },
+        {
+          "Id": "88888888-FB0F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0A0F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "Order": 8
+        },
+        {
+          "Id": "88888888-FC0F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0B0F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0C0F-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-FD0F-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0C0F-0000-0000-000000000001",
+          "ToNodeId": "88888888-0000-0002-0000-000000000001",
+          "Order": 14
+        },
+        {
+          "Id": "88888888-F110-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0000-0001-0000-000000000001",
+          "ToNodeId": "88888888-0110-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F210-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0110-0000-0000-000000000001",
+          "ToNodeId": "88888888-0210-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F310-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0210-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F410-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0310-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 1
+        },
+        {
+          "Id": "88888888-F510-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0410-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 2
+        },
+        {
+          "Id": "88888888-F610-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0510-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 3
+        },
+        {
+          "Id": "88888888-F710-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0610-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 4
+        },
+        {
+          "Id": "88888888-F810-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0710-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 5
+        },
+        {
+          "Id": "88888888-F910-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0810-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 6
+        },
+        {
+          "Id": "88888888-FA10-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0910-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 7
+        },
+        {
+          "Id": "88888888-FB10-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0A10-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B10-0000-0000-000000000001",
+          "Order": 8
+        },
+        {
+          "Id": "88888888-FC10-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0B10-0000-0000-000000000001",
+          "ToNodeId": "88888888-0C10-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-FD10-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0C10-0000-0000-000000000001",
+          "ToNodeId": "88888888-0000-0002-0000-000000000001",
+          "Order": 15
+        },
+        {
+          "Id": "88888888-F111-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0000-0001-0000-000000000001",
+          "ToNodeId": "88888888-0111-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F211-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0111-0000-0000-000000000001",
+          "ToNodeId": "88888888-0211-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F311-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0211-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-F411-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0311-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 1
+        },
+        {
+          "Id": "88888888-F511-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0411-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 2
+        },
+        {
+          "Id": "88888888-F611-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0511-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 3
+        },
+        {
+          "Id": "88888888-F711-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0611-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 4
+        },
+        {
+          "Id": "88888888-F811-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0711-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 5
+        },
+        {
+          "Id": "88888888-F911-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0811-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 6
+        },
+        {
+          "Id": "88888888-FA11-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0911-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 7
+        },
+        {
+          "Id": "88888888-FB11-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0A11-0000-0000-000000000001",
+          "ToNodeId": "88888888-0B11-0000-0000-000000000001",
+          "Order": 8
+        },
+        {
+          "Id": "88888888-FC11-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0B11-0000-0000-000000000001",
+          "ToNodeId": "88888888-0C11-0000-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "88888888-FD11-0000-0002-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "88888888-0C11-0000-0000-000000000001",
+          "ToNodeId": "88888888-0000-0002-0000-000000000001",
+          "Order": 16
+        }
+      ],
+      "CompositeNodeMembers": [
+        {
+          "CompositeNodeId": "88888888-0101-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0102-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0103-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0104-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0105-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0106-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0107-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0108-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0109-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-010A-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-010B-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-010C-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-010D-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-010E-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-010F-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0110-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "88888888-0111-0000-0000-000000000001",
+          "MemberNodeId": "77777777-0001-0000-0000-000000000001"
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "88888888-E101-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo ENCOMIENDAS (separados por |)"
+        },
+        {
+          "Id": "88888888-E201-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E301-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E401-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E501-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E601-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E701-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E801-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDAS_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo ENCOMIENDAS"
+        },
+        {
+          "Id": "88888888-E102-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo RECAMBIO (separados por |)"
+        },
+        {
+          "Id": "88888888-E202-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E302-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E402-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E502-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E602-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E702-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E802-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RECAMBIO_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo RECAMBIO"
+        },
+        {
+          "Id": "88888888-E103-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo ENCOMIENDA_CORPORATIVA (separados por |)"
+        },
+        {
+          "Id": "88888888-E203-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E303-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E403-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E503-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E603-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E703-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E803-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_CORPORATIVA_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo ENCOMIENDA_CORPORATIVA"
+        },
+        {
+          "Id": "88888888-E104-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo ENCOMIENDA_INTERNACIONAL (separados por |)"
+        },
+        {
+          "Id": "88888888-E204-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E304-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E404-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E504-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E604-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E704-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E804-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_INTERNACIONAL_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo ENCOMIENDA_INTERNACIONAL"
+        },
+        {
+          "Id": "88888888-E105-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo INFORME_RENDICION (separados por |)"
+        },
+        {
+          "Id": "88888888-E205-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E305-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E405-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E505-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E605-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E705-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E805-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "INFORME_RENDICION_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo INFORME_RENDICION"
+        },
+        {
+          "Id": "88888888-E106-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo BOLSINES (separados por |)"
+        },
+        {
+          "Id": "88888888-E206-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E306-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E406-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E506-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E606-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E706-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E806-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BOLSINES_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo BOLSINES"
+        },
+        {
+          "Id": "88888888-E107-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo BODEGAS (separados por |)"
+        },
+        {
+          "Id": "88888888-E207-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E307-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E407-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E507-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E607-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E707-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E807-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "BODEGAS_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo BODEGAS"
+        },
+        {
+          "Id": "88888888-E108-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo VENTA_DIRECTA (separados por |)"
+        },
+        {
+          "Id": "88888888-E208-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E308-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E408-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E508-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E608-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E708-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E808-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "VENTA_DIRECTA_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo VENTA_DIRECTA"
+        },
+        {
+          "Id": "88888888-E109-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo SERVICIO_FINANCIERO (separados por |)"
+        },
+        {
+          "Id": "88888888-E209-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E309-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E409-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E509-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E609-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E709-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E809-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "SERVICIO_FINANCIERO_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo SERVICIO_FINANCIERO"
+        },
+        {
+          "Id": "88888888-E10A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo MENSAJERIA_VIP (separados por |)"
+        },
+        {
+          "Id": "88888888-E20A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E30A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E40A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E50A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E60A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E70A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E80A-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_VIP_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo MENSAJERIA_VIP"
+        },
+        {
+          "Id": "88888888-E10B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo CAJA_PACK (separados por |)"
+        },
+        {
+          "Id": "88888888-E20B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E30B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E40B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E50B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E60B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E70B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E80B-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "CAJA_PACK_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo CAJA_PACK"
+        },
+        {
+          "Id": "88888888-E10C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo MENSAJERIA_SIMPLE (separados por |)"
+        },
+        {
+          "Id": "88888888-E20C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E30C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E40C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E50C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E60C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E70C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E80C-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "MENSAJERIA_SIMPLE_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo MENSAJERIA_SIMPLE"
+        },
+        {
+          "Id": "88888888-E10D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo DOCUMENTO_ANDREANI (separados por |)"
+        },
+        {
+          "Id": "88888888-E20D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E30D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E40D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E50D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E60D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E70D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E80D-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "DOCUMENTO_ANDREANI_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo DOCUMENTO_ANDREANI"
+        },
+        {
+          "Id": "88888888-E10E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo ENCOMIENDA_GC (separados por |)"
+        },
+        {
+          "Id": "88888888-E20E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E30E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E40E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E50E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E60E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E70E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E80E-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "ENCOMIENDA_GC_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo ENCOMIENDA_GC"
+        },
+        {
+          "Id": "88888888-E10F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo GESTIONES (separados por |)"
+        },
+        {
+          "Id": "88888888-E20F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E30F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E40F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E50F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E60F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E70F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E80F-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo GESTIONES"
+        },
+        {
+          "Id": "88888888-E110-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo GESTIONES_PORTABILIDAD (separados por |)"
+        },
+        {
+          "Id": "88888888-E210-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E310-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E410-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E510-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E610-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E710-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E810-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "GESTIONES_PORTABILIDAD_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo GESTIONES_PORTABILIDAD"
+        },
+        {
+          "Id": "88888888-E111-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C.ConceptList",
+          "ValueType": "string",
+          "Description": "Lista de conceptos del grupo RETIRO_B2C (separados por |)"
+        },
+        {
+          "Id": "88888888-E211-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_PrecioBase",
+          "ValueType": "decimal",
+          "Description": "Precio base por HDR del grupo RETIRO_B2C"
+        },
+        {
+          "Id": "88888888-E311-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_L1",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 1 del grupo RETIRO_B2C"
+        },
+        {
+          "Id": "88888888-E411-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_P1",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 1 del grupo RETIRO_B2C"
+        },
+        {
+          "Id": "88888888-E511-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_L2",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 2 del grupo RETIRO_B2C"
+        },
+        {
+          "Id": "88888888-E611-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_P2",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 2 del grupo RETIRO_B2C"
+        },
+        {
+          "Id": "88888888-E711-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_L3",
+          "ValueType": "decimal",
+          "Description": "Limite segmento 3 del grupo RETIRO_B2C"
+        },
+        {
+          "Id": "88888888-E811-0000-0001-000000000001",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "ParameterName": "RETIRO_B2C_P3",
+          "ValueType": "decimal",
+          "Description": "Precio segmento 3 del grupo RETIRO_B2C"
+        }
+      ]
+    },
+    {
+      "FormulaId": "66666666-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "66666666-0001-0000-0000-000000000001",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "Items",
+          "NodeKind": "VariableInput",
+          "NodeData": "{\"DataSource\":\"PayableItem\",\"FieldName\":\"DistanceToRouting\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000004",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "Uno",
+          "NodeKind": "ConstantInput",
+          "NodeData": "{\"ConstantName\":\"Uno\",\"Value\":\"1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000007",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "TarifaRadio1",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"TarifaRadio1\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000008",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "TarifaRadio2",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"TarifaRadio2\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000009",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "TarifaRadio3",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"TarifaRadio3\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000003",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "MaxDistSpec",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"DistanceToRouting\",\"Aggregation\":\"Max\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000005",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "ComputeMax",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000002",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "GrupoVehiculo",
+          "NodeKind": "Grouping",
+          "NodeData": "{\"GroupByFieldName\":\"VehicleDomain\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000010",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "C1",
+          "NodeKind": "Conditional",
+          "NodeData": "{\"predicate\":\"input >= 0\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000011",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "C2",
+          "NodeKind": "Conditional",
+          "NodeData": "{\"predicate\":\"input >= 30\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000012",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "C3",
+          "NodeKind": "Conditional",
+          "NodeData": "{\"predicate\":\"input >= 60\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000006",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "GetMax",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"Max\"}"
+        },
+        {
+          "Id": "66666666-0001-0000-0000-000000000013",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "Label": "Result",
+          "NodeKind": "Output",
+          "NodeData": "{}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "66666666-0003-0000-0000-000000000001",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000001",
+          "ToNodeId": "66666666-0001-0000-0000-000000000002",
+          "Order": 0
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000002",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000002",
+          "ToNodeId": "66666666-0001-0000-0000-000000000005",
+          "Order": 0
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000003",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000003",
+          "ToNodeId": "66666666-0001-0000-0000-000000000005",
+          "Order": 1
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000004",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000004",
+          "ToNodeId": "66666666-0001-0000-0000-000000000005",
+          "Order": 2
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000005",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000005",
+          "ToNodeId": "66666666-0001-0000-0000-000000000006",
+          "Order": 0
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000006",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000006",
+          "ToNodeId": "66666666-0001-0000-0000-000000000010",
+          "Order": 0
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000007",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000007",
+          "ToNodeId": "66666666-0001-0000-0000-000000000010",
+          "Order": 1
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000008",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000006",
+          "ToNodeId": "66666666-0001-0000-0000-000000000011",
+          "Order": 0
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000009",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000008",
+          "ToNodeId": "66666666-0001-0000-0000-000000000011",
+          "Order": 1
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000010",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000010",
+          "ToNodeId": "66666666-0001-0000-0000-000000000011",
+          "Order": 2
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000011",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000006",
+          "ToNodeId": "66666666-0001-0000-0000-000000000012",
+          "Order": 0
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000012",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000009",
+          "ToNodeId": "66666666-0001-0000-0000-000000000012",
+          "Order": 1
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000013",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000011",
+          "ToNodeId": "66666666-0001-0000-0000-000000000012",
+          "Order": 2
+        },
+        {
+          "Id": "66666666-0003-0000-0000-000000000014",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "FromNodeId": "66666666-0001-0000-0000-000000000012",
+          "ToNodeId": "66666666-0001-0000-0000-000000000013",
+          "Order": 0
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "66666666-0002-0000-0000-000000000001",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "ParameterName": "TarifaRadio1",
+          "ValueType": "decimal",
+          "Description": "Tarifa completa para radio 0-30 km"
+        },
+        {
+          "Id": "66666666-0002-0000-0000-000000000002",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "ParameterName": "TarifaRadio2",
+          "ValueType": "decimal",
+          "Description": "Tarifa completa para radio 30-60 km"
+        },
+        {
+          "Id": "66666666-0002-0000-0000-000000000003",
+          "FormulaId": "66666666-0000-0000-0000-000000000001",
+          "ParameterName": "TarifaRadio3",
+          "ValueType": "decimal",
+          "Description": "Tarifa completa para radio 60-90000 km"
+        }
+      ]
+    },
+    {
+      "FormulaId": "44444444-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "44444444-0001-0000-0000-000000000001",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "Label": "LowerBound",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"LowerBound\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "44444444-0001-0000-0000-000000000002",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "Label": "UpperBound",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"UpperBound\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "44444444-0001-0000-0000-000000000003",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "Label": "FiltroRadio",
+          "NodeKind": "Filter",
+          "NodeData": "{\"FilterExpression\":\"item.DistanceToRouting < param.UpperBound && item.DistanceToRouting > param.LowerBound\"}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "44444444-0003-0000-0000-000000000001",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "FromNodeId": "44444444-0001-0000-0000-000000000001",
+          "ToNodeId": "44444444-0001-0000-0000-000000000003",
+          "Order": 1
+        },
+        {
+          "Id": "44444444-0003-0000-0000-000000000002",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "FromNodeId": "44444444-0001-0000-0000-000000000002",
+          "ToNodeId": "44444444-0001-0000-0000-000000000003",
+          "Order": 2
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "44444444-0002-0000-0000-000000000001",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "ParameterName": "LowerBound",
+          "ValueType": "decimal",
+          "Description": "Límite inferior del radio (km, excluido)"
+        },
+        {
+          "Id": "44444444-0002-0000-0000-000000000002",
+          "FormulaId": "44444444-0000-0000-0000-000000000001",
+          "ParameterName": "UpperBound",
+          "ValueType": "decimal",
+          "Description": "Límite superior del radio (km, excluido)"
+        }
+      ]
+    },
+    {
+      "FormulaId": "33333333-0000-0000-0000-000000000001",
+      "Nodes": [
+        {
+          "Id": "33333333-0001-0000-0000-000000000001",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "PayableItems",
+          "NodeKind": "VariableInput",
+          "NodeData": "{\"DataSource\":\"PayableItem\",\"FieldName\":\"Concept\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000006",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "TariffA",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"TariffA\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000007",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "TariffB",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"TariffB\",\"ValueType\":\"decimal\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000004",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "WeightSpec",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"WeightValue\",\"Aggregation\":\"Sum\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000005",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "MaxKmSpec",
+          "NodeKind": "QuantitySpecInput",
+          "NodeData": "{\"FieldName\":\"KilometerValue\",\"Aggregation\":\"Max\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000008",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "MultiplyA",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000009",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "MultiplyB",
+          "NodeKind": "MathOperation",
+          "NodeData": "{\"Operation\":\"Multiply\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-00000000000A",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "ConcatResults",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"Concat\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-00000000000B",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "GrandTotal",
+          "NodeKind": "Aggregate",
+          "NodeData": "{\"AggregateOperationKind\":\"ReduceSum\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000002",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "FilterGroupA",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FilterAndGroupByPolygon\",\"EntryNodeId\":\"22222222-0001-0000-0000-000000000002\",\"ExitNodeId\":\"22222222-0001-0000-0000-000000000003\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-000000000003",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "FilterGroupB",
+          "NodeKind": "CompositeGroup",
+          "NodeData": "{\"CompositeGroupName\":\"FilterAndGroupByPolygon\",\"EntryNodeId\":\"22222222-0001-0000-0000-000000000002\",\"ExitNodeId\":\"22222222-0001-0000-0000-000000000003\"}"
+        },
+        {
+          "Id": "33333333-0001-0000-0000-00000000000C",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "Label": "Result",
+          "NodeKind": "Output",
+          "NodeData": "{}"
+        }
+      ],
+      "Edges": [
+        {
+          "Id": "33333333-0003-0000-0000-000000000001",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000001",
+          "ToNodeId": "33333333-0001-0000-0000-000000000002",
+          "Order": 0
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000002",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000001",
+          "ToNodeId": "33333333-0001-0000-0000-000000000003",
+          "Order": 0
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000003",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000002",
+          "ToNodeId": "33333333-0001-0000-0000-000000000008",
+          "Order": 0
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000004",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000004",
+          "ToNodeId": "33333333-0001-0000-0000-000000000008",
+          "Order": 1
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000005",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000006",
+          "ToNodeId": "33333333-0001-0000-0000-000000000008",
+          "Order": 2
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000006",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000003",
+          "ToNodeId": "33333333-0001-0000-0000-000000000009",
+          "Order": 0
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000007",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000005",
+          "ToNodeId": "33333333-0001-0000-0000-000000000009",
+          "Order": 1
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000008",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000007",
+          "ToNodeId": "33333333-0001-0000-0000-000000000009",
+          "Order": 2
+        },
+        {
+          "Id": "33333333-0003-0000-0000-000000000009",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000008",
+          "ToNodeId": "33333333-0001-0000-0000-00000000000A",
+          "Order": 0
+        },
+        {
+          "Id": "33333333-0003-0000-0000-00000000000A",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-000000000009",
+          "ToNodeId": "33333333-0001-0000-0000-00000000000A",
+          "Order": 1
+        },
+        {
+          "Id": "33333333-0003-0000-0000-00000000000B",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-00000000000A",
+          "ToNodeId": "33333333-0001-0000-0000-00000000000B",
+          "Order": 0
+        },
+        {
+          "Id": "33333333-0003-0000-0000-00000000000C",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "FromNodeId": "33333333-0001-0000-0000-00000000000B",
+          "ToNodeId": "33333333-0001-0000-0000-00000000000C",
+          "Order": 0
+        }
+      ],
+      "CompositeEdgeMembers": [
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000002",
+          "MemberEdgeId": "22222222-0003-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000002",
+          "MemberEdgeId": "22222222-0003-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000003",
+          "MemberEdgeId": "22222222-0003-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000003",
+          "MemberEdgeId": "22222222-0003-0000-0000-000000000002"
+        }
+      ],
+      "CompositeNodeMembers": [
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000002",
+          "MemberNodeId": "22222222-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000002",
+          "MemberNodeId": "22222222-0001-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000002",
+          "MemberNodeId": "22222222-0001-0000-0000-000000000003"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000003",
+          "MemberNodeId": "22222222-0001-0000-0000-000000000001"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000003",
+          "MemberNodeId": "22222222-0001-0000-0000-000000000002"
+        },
+        {
+          "CompositeNodeId": "33333333-0001-0000-0000-000000000003",
+          "MemberNodeId": "22222222-0001-0000-0000-000000000003"
+        }
+      ],
+      "ParameterDefinitions": [
+        {
+          "Id": "33333333-0002-0000-0000-000000000001",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "ParameterName": "TariffA",
+          "ValueType": "decimal",
+          "Description": "Price per kg (ConceptA)"
+        },
+        {
+          "Id": "33333333-0002-0000-0000-000000000002",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "ParameterName": "TariffB",
+          "ValueType": "decimal",
+          "Description": "Price per max km (ConceptB)"
+        },
+        {
+          "Id": "B462A5E2-A1B7-407D-BADF-4F068F212CFB",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "ParameterName": "FilterGroupA.ConceptFilter",
+          "ValueType": "string"
+        },
+        {
+          "Id": "2777B4C0-72C3-4AC6-B686-6464BBBADAD2",
+          "FormulaId": "33333333-0000-0000-0000-000000000001",
+          "ParameterName": "FilterGroupB.ConceptFilter",
+          "ValueType": "string",
+          "Description": "Concept name for groupt B node to filter by"
+        }
+      ]
+    }
+  ]
+}
