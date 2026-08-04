@@ -184,7 +184,6 @@ function buildFlowFromFormula(formula) {
 
   const layerCounts = new Map();
   const childNodes = [];
-  const internalEdges = [];
 
   const reactFlowNodes = nodes.map((node) => {
     const layer = levelByNodeId.get(node.Id) ?? 0;
@@ -196,24 +195,18 @@ function buildFlowFromFormula(formula) {
 
     if (node.NodeKind === 'CompositeGroup') {
       const members = compositeNodeMembersMap.get(node.Id) ?? [];
-      const memberEdgeEntries = compositeEdgeMembersMap.get(node.Id) ?? [];
+      const memberEdges = compositeEdgeMembersMap.get(node.Id) ?? [];
 
       const cols = Math.max(1, Math.ceil(Math.sqrt(members.length)));
       const rows = Math.max(1, Math.ceil(members.length / cols));
       const groupWidth = cols * (CHILD_NODE_WIDTH + CHILD_PADDING) + CHILD_PADDING;
       const groupHeight = GROUP_HEADER_HEIGHT + rows * (CHILD_NODE_HEIGHT + CHILD_PADDING) + CHILD_PADDING;
 
-      // Map: MemberNodeId -> child ReactFlow node id (used for edge wiring)
-      const memberNodeIdToChildId = new Map();
-
       members.forEach((member, i) => {
         const col = i % cols;
         const memberRow = Math.floor(i / cols);
         const memberNodeData = member.MemberNodeData ? JSON.parse(member.MemberNodeData) : {};
         const memberUiKind = NODE_KIND_TO_UI_KIND[member.MemberNodeKind] ?? 'operation';
-        const childId = `${node.Id}__child__${member.MemberNodeId}__${i}`;
-
-        memberNodeIdToChildId.set(member.MemberNodeId, childId);
 
         const memberFields = [];
         if (member.MemberNodeKind === 'VariableInput') {
@@ -242,7 +235,7 @@ function buildFlowFromFormula(formula) {
         }
 
         childNodes.push({
-          id: childId,
+          id: `${node.Id}__child__${member.MemberNodeId}__${i}`,
           type: 'flowNode',
           parentId: node.Id,
           extent: 'parent',
@@ -259,23 +252,6 @@ function buildFlowFromFormula(formula) {
         });
       });
 
-      // Wire internal edges using the global edge lookup
-      memberEdgeEntries.forEach((entry) => {
-        const edge = ALL_EDGES_BY_ID.get(entry.MemberEdgeId);
-        if (!edge) return;
-        const sourceChildId = memberNodeIdToChildId.get(edge.FromNodeId);
-        const targetChildId = memberNodeIdToChildId.get(edge.ToNodeId);
-        if (!sourceChildId || !targetChildId) return;
-        internalEdges.push({
-          id: `internal__${node.Id}__${edge.Id}`,
-          source: sourceChildId,
-          target: targetChildId,
-          animated: true,
-          label: edge.Order != null ? `#${edge.Order}` : undefined,
-          style: { stroke: 'rgba(230,80,230,0.5)' },
-        });
-      });
-
       return {
         id: node.Id,
         type: 'compositeGroupNode',
@@ -285,7 +261,7 @@ function buildFlowFromFormula(formula) {
           groupWidth,
           groupHeight,
           memberCount: members.length,
-          memberEdgeCount: memberEdgeEntries.length,
+          memberEdgeCount: memberEdges.length,
         },
         style: { width: groupWidth, height: groupHeight },
         zIndex: -1,
@@ -359,7 +335,7 @@ function buildFlowFromFormula(formula) {
     };
   });
 
-  return { nodes: allReactFlowNodes, edges: [...reactFlowEdges, ...internalEdges] };
+  return { nodes: allReactFlowNodes, edges: reactFlowEdges };
 }
 
 const FORMULA_LABELS = {
@@ -372,11 +348,6 @@ const FORMULA_LABELS = {
   '44444444-0000-0000-0000-000000000001': 'Radio Bounds Filter',
   '33333333-0000-0000-0000-000000000001': 'Tariff A/B by Weight',
 };
-
-// Global lookup: edgeId -> edge, across all formulas
-const ALL_EDGES_BY_ID = new Map(
-  (allFormulasData.Formulas ?? []).flatMap((f) => (f.Edges ?? []).map((e) => [e.Id, e]))
-);
 
 const FORMULAS = (allFormulasData.Formulas ?? []).map((f) => ({
   label: FORMULA_LABELS[f.FormulaId] ?? f.FormulaId,
