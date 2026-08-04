@@ -31,6 +31,11 @@ const ICONS = {
 
 const STATUS_LABELS = { running: 'Running', idle: 'Idle', error: 'Error' };
 
+const CHILD_NODE_WIDTH = 210;
+const CHILD_NODE_HEIGHT = 110;
+const CHILD_PADDING = 16;
+const GROUP_HEADER_HEIGHT = 48;
+
 function FlowNode({ data, selected }) {
   const kind = data.kind ?? 'operation';
   return (
@@ -67,7 +72,23 @@ function FlowNode({ data, selected }) {
   );
 }
 
-const nodeTypes = { flowNode: FlowNode };
+function CompositeGroupNode({ data, selected }) {
+  return (
+    <div
+      className={`composite-group-node ${selected ? 'selected' : ''}`}
+      style={{ width: data.groupWidth, height: data.groupHeight }}
+    >
+      <Handle type="target" position={Position.Left} />
+      <div className="composite-group-header">
+        <div className="node-icon">{ICONS.compositeGroup}</div>
+        <span className="composite-group-name">{data.label}</span>
+      </div>
+      <Handle type="source" position={Position.Right} />
+    </div>
+  );
+}
+
+const nodeTypes = { flowNode: FlowNode, compositeGroupNode: CompositeGroupNode };
 
 const NODE_KIND_TO_UI_KIND = {
   VariableInput: 'variable',
@@ -101,6 +122,22 @@ function buildFlowFromFormula(formula) {
   const nodes = formula?.Nodes ?? [];
   const edges = formula?.Edges ?? [];
   const parameterDefinitions = formula?.ParameterDefinitions ?? [];
+  const compositeNodeMembers = formula?.CompositeNodeMembers ?? [];
+  const compositeEdgeMembers = formula?.CompositeEdgeMembers ?? [];
+
+  // Build lookup maps: compositeNodeId -> full member entries
+  const compositeNodeMembersMap = new Map();
+  for (const entry of compositeNodeMembers) {
+    const list = compositeNodeMembersMap.get(entry.CompositeNodeId) ?? [];
+    list.push(entry);
+    compositeNodeMembersMap.set(entry.CompositeNodeId, list);
+  }
+  const compositeEdgeMembersMap = new Map();
+  for (const entry of compositeEdgeMembers) {
+    const list = compositeEdgeMembersMap.get(entry.CompositeNodeId) ?? [];
+    list.push(entry.MemberEdgeId);
+    compositeEdgeMembersMap.set(entry.CompositeNodeId, list);
+  }
 
   const parameterByName = new Map(
     parameterDefinitions.map((parameterDefinition) => [
@@ -146,6 +183,8 @@ function buildFlowFromFormula(formula) {
   }
 
   const layerCounts = new Map();
+  const childNodes = [];
+
   const reactFlowNodes = nodes.map((node) => {
     const layer = levelByNodeId.get(node.Id) ?? 0;
     const row = layerCounts.get(layer) ?? 0;
@@ -153,6 +192,81 @@ function buildFlowFromFormula(formula) {
 
     const uiKind = NODE_KIND_TO_UI_KIND[node.NodeKind] ?? 'operation';
     const nodeData = node.NodeData ? JSON.parse(node.NodeData) : {};
+
+    if (node.NodeKind === 'CompositeGroup') {
+      const members = compositeNodeMembersMap.get(node.Id) ?? [];
+      const memberEdges = compositeEdgeMembersMap.get(node.Id) ?? [];
+
+      const cols = Math.max(1, Math.ceil(Math.sqrt(members.length)));
+      const rows = Math.max(1, Math.ceil(members.length / cols));
+      const groupWidth = cols * (CHILD_NODE_WIDTH + CHILD_PADDING) + CHILD_PADDING;
+      const groupHeight = GROUP_HEADER_HEIGHT + rows * (CHILD_NODE_HEIGHT + CHILD_PADDING) + CHILD_PADDING;
+
+      members.forEach((member, i) => {
+        const col = i % cols;
+        const memberRow = Math.floor(i / cols);
+        const memberNodeData = member.MemberNodeData ? JSON.parse(member.MemberNodeData) : {};
+        const memberUiKind = NODE_KIND_TO_UI_KIND[member.MemberNodeKind] ?? 'operation';
+
+        const memberFields = [];
+        if (member.MemberNodeKind === 'VariableInput') {
+          memberFields.push(['data source', memberNodeData.DataSource ?? '-']);
+          memberFields.push(['field', memberNodeData.FieldName ?? '-']);
+        } else if (member.MemberNodeKind === 'ConstantInput') {
+          memberFields.push(['name', memberNodeData.ConstantName ?? '-']);
+          memberFields.push(['value', memberNodeData.Value ?? '-']);
+          memberFields.push(['type', memberNodeData.ValueType ?? '-']);
+        } else if (member.MemberNodeKind === 'ParameterInput') {
+          memberFields.push(['param', memberNodeData.ParameterName ?? '-']);
+          memberFields.push(['type', memberNodeData.ValueType ?? '-']);
+        } else if (member.MemberNodeKind === 'MathOperation') {
+          memberFields.push(['operation', memberNodeData.Operation ?? '-']);
+        } else if (member.MemberNodeKind === 'Grouping') {
+          memberFields.push(['group by', memberNodeData.GroupByFieldName ?? '-']);
+        } else if (member.MemberNodeKind === 'Filter') {
+          memberFields.push(['expression', memberNodeData.FilterExpression ?? '-']);
+        } else if (member.MemberNodeKind === 'QuantitySpecInput') {
+          memberFields.push(['field', memberNodeData.FieldName ?? '-']);
+          memberFields.push(['aggregation', memberNodeData.Aggregation ?? '-']);
+        } else if (member.MemberNodeKind === 'Aggregate') {
+          memberFields.push(['operation', memberNodeData.AggregateOperationKind ?? '-']);
+        } else if (member.MemberNodeKind === 'Conditional') {
+          memberFields.push(['predicate', memberNodeData.predicate ?? '-']);
+        }
+
+        childNodes.push({
+          id: `${node.Id}__child__${member.MemberNodeId}__${i}`,
+          type: 'flowNode',
+          parentId: node.Id,
+          extent: 'parent',
+          position: {
+            x: CHILD_PADDING + col * (CHILD_NODE_WIDTH + CHILD_PADDING),
+            y: GROUP_HEADER_HEIGHT + memberRow * (CHILD_NODE_HEIGHT + CHILD_PADDING),
+          },
+          data: {
+            kind: memberUiKind,
+            label: member.MemberLabel,
+            fields: memberFields,
+          },
+          style: { width: CHILD_NODE_WIDTH },
+        });
+      });
+
+      return {
+        id: node.Id,
+        type: 'compositeGroupNode',
+        position: { x: 80 + layer * 300, y: 120 + row * 170 },
+        data: {
+          label: nodeData.CompositeGroupName ?? node.Label,
+          groupWidth,
+          groupHeight,
+          memberCount: members.length,
+          memberEdgeCount: memberEdges.length,
+        },
+        style: { width: groupWidth, height: groupHeight },
+        zIndex: -1,
+      };
+    }
 
     const fields = [];
 
@@ -183,10 +297,6 @@ function buildFlowFromFormula(formula) {
       fields.push(['operation', nodeData.AggregateOperationKind ?? '-']);
     } else if (node.NodeKind === 'Conditional') {
       fields.push(['predicate', nodeData.predicate ?? '-']);
-    } else if (node.NodeKind === 'CompositeGroup') {
-      fields.push(['group name', nodeData.CompositeGroupName ?? '-']);
-      if (nodeData.EntryNodeId) fields.push(['entry node', nodeData.EntryNodeId]);
-      if (nodeData.ExitNodeId) fields.push(['exit node', nodeData.ExitNodeId]);
     }
 
     return {
@@ -200,6 +310,9 @@ function buildFlowFromFormula(formula) {
       },
     };
   });
+
+  // Composite group nodes must come before their children in the array
+  const allReactFlowNodes = [...reactFlowNodes, ...childNodes];
 
   const nodeMap = new Map(nodes.map((node) => [node.Id, node]));
   const sortedEdges = [...edges].sort((a, b) => {
@@ -222,7 +335,7 @@ function buildFlowFromFormula(formula) {
     };
   });
 
-  return { nodes: reactFlowNodes, edges: reactFlowEdges };
+  return { nodes: allReactFlowNodes, edges: reactFlowEdges };
 }
 
 const FORMULA_LABELS = {

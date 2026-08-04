@@ -338,6 +338,53 @@
 .custom-node.conditional .node-icon { background: rgba(255, 170, 0, 0.1); color: #ffaa00; }
 .custom-node.conditional .node-type { color: #ffaa00; }
 
+/* CompositeGroup node — container */
+.composite-group-node {
+  background: rgba(230, 80, 230, 0.04);
+  border: 2px dashed rgba(230, 80, 230, 0.45);
+  border-radius: 10px;
+  box-shadow: 0 0 24px rgba(230, 80, 230, 0.08), 0 4px 32px rgba(0,0,0,0.5);
+  font-family: 'IBM Plex Mono', monospace;
+  position: relative;
+}
+
+.composite-group-node.selected {
+  border-color: rgba(230, 80, 230, 0.8);
+  box-shadow: 0 0 32px rgba(230, 80, 230, 0.2), 0 4px 32px rgba(0,0,0,0.5);
+}
+
+.composite-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(230, 80, 230, 0.18);
+  background: rgba(230, 80, 230, 0.07);
+  border-radius: 8px 8px 0 0;
+}
+
+.composite-group-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e650e6;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.composite-group-node .node-icon {
+  background: rgba(230, 80, 230, 0.15);
+  color: #e650e6;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 /* React Flow overrides */
 .react-flow__background { background: #0b0d12; }
 .react-flow__edge-path { stroke-width: 1.5; }
