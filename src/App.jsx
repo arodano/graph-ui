@@ -78,12 +78,14 @@ function CompositeGroupNode({ data, selected }) {
       className={`composite-group-node ${selected ? 'selected' : ''}`}
       style={{ width: data.groupWidth, height: data.groupHeight }}
     >
-      <Handle type="target" position={Position.Left} />
+      <Handle id="ext-target" type="target" position={Position.Left} />
+      <Handle id="inner-source" type="source" position={Position.Left} style={{ opacity: 0, width: 0, height: 0, minWidth: 0, minHeight: 0, padding: 0 }} />
       <div className="composite-group-header">
         <div className="node-icon">{ICONS.compositeGroup}</div>
         <span className="composite-group-name">{data.label}</span>
       </div>
-      <Handle type="source" position={Position.Right} />
+      <Handle id="ext-source" type="source" position={Position.Right} />
+      <Handle id="inner-target" type="target" position={Position.Right} style={{ opacity: 0, width: 0, height: 0, minWidth: 0, minHeight: 0, padding: 0 }} />
     </div>
   );
 }
@@ -139,6 +141,18 @@ function buildFlowFromFormula(formula) {
     compositeEdgeMembersMap.set(entry.CompositeNodeId, list);
   }
 
+  const compositeMemberNodeIds = new Set(compositeNodeMembers.map((entry) => entry.MemberNodeId));
+  const edgeById = new Map(edges.map((edge) => [edge.Id, edge]));
+  const compositeMemberEdgeIds = new Set(compositeEdgeMembers.map((entry) => entry.MemberEdgeId));
+  const visibleNodes = nodes.filter((node) => !compositeMemberNodeIds.has(node.Id));
+  const visibleNodeIds = new Set(visibleNodes.map((node) => node.Id));
+  const visibleEdges = edges.filter(
+    (edge) =>
+      !compositeMemberEdgeIds.has(edge.Id) &&
+      visibleNodeIds.has(edge.FromNodeId) &&
+      visibleNodeIds.has(edge.ToNodeId),
+  );
+
   const parameterByName = new Map(
     parameterDefinitions.map((parameterDefinition) => [
       parameterDefinition.ParameterName,
@@ -146,10 +160,10 @@ function buildFlowFromFormula(formula) {
     ]),
   );
 
-  const inDegree = new Map(nodes.map((node) => [node.Id, 0]));
-  const outgoing = new Map(nodes.map((node) => [node.Id, []]));
+  const inDegree = new Map(visibleNodes.map((node) => [node.Id, 0]));
+  const outgoing = new Map(visibleNodes.map((node) => [node.Id, []]));
 
-  for (const edge of edges) {
+  for (const edge of visibleEdges) {
     inDegree.set(edge.ToNodeId, (inDegree.get(edge.ToNodeId) ?? 0) + 1);
     const fromEdges = outgoing.get(edge.FromNodeId);
     if (fromEdges) {
@@ -160,7 +174,7 @@ function buildFlowFromFormula(formula) {
   const queue = [];
   const levelByNodeId = new Map();
 
-  for (const node of nodes) {
+  for (const node of visibleNodes) {
     if ((inDegree.get(node.Id) ?? 0) === 0) {
       queue.push(node.Id);
       levelByNodeId.set(node.Id, 0);
@@ -184,8 +198,9 @@ function buildFlowFromFormula(formula) {
 
   const layerCounts = new Map();
   const childNodes = [];
+  const childNodeIdByCompositeNode = new Map();
 
-  const reactFlowNodes = nodes.map((node) => {
+  const reactFlowNodes = visibleNodes.map((node) => {
     const layer = levelByNodeId.get(node.Id) ?? 0;
     const row = layerCounts.get(layer) ?? 0;
     layerCounts.set(layer, row + 1);
@@ -196,6 +211,7 @@ function buildFlowFromFormula(formula) {
     if (node.NodeKind === 'CompositeGroup') {
       const members = compositeNodeMembersMap.get(node.Id) ?? [];
       const memberEdges = compositeEdgeMembersMap.get(node.Id) ?? [];
+      const childNodeIdByMemberNodeId = new Map();
 
       const cols = Math.max(1, Math.ceil(Math.sqrt(members.length)));
       const rows = Math.max(1, Math.ceil(members.length / cols));
@@ -207,6 +223,7 @@ function buildFlowFromFormula(formula) {
         const memberRow = Math.floor(i / cols);
         const memberNodeData = member.MemberNodeData ? JSON.parse(member.MemberNodeData) : {};
         const memberUiKind = NODE_KIND_TO_UI_KIND[member.MemberNodeKind] ?? 'operation';
+        const childNodeId = `${node.Id}__child__${member.MemberNodeId}`;
 
         const memberFields = [];
         if (member.MemberNodeKind === 'VariableInput') {
@@ -235,7 +252,7 @@ function buildFlowFromFormula(formula) {
         }
 
         childNodes.push({
-          id: `${node.Id}__child__${member.MemberNodeId}__${i}`,
+          id: childNodeId,
           type: 'flowNode',
           parentId: node.Id,
           extent: 'parent',
@@ -250,7 +267,11 @@ function buildFlowFromFormula(formula) {
           },
           style: { width: CHILD_NODE_WIDTH },
         });
+
+        childNodeIdByMemberNodeId.set(member.MemberNodeId, childNodeId);
       });
+
+      childNodeIdByCompositeNode.set(node.Id, childNodeIdByMemberNodeId);
 
       return {
         id: node.Id,
@@ -314,8 +335,9 @@ function buildFlowFromFormula(formula) {
   // Composite group nodes must come before their children in the array
   const allReactFlowNodes = [...reactFlowNodes, ...childNodes];
 
-  const nodeMap = new Map(nodes.map((node) => [node.Id, node]));
-  const sortedEdges = [...edges].sort((a, b) => {
+  const nodeMap = new Map(visibleNodes.map((node) => [node.Id, node]));
+  const sortedEdges = [...visibleEdges]
+    .sort((a, b) => {
     if (a.ToNodeId === b.ToNodeId) {
       return a.Order - b.Order;
     }
@@ -328,6 +350,7 @@ function buildFlowFromFormula(formula) {
     return {
       id: edge.Id,
       source: edge.FromNodeId,
+      ...(fromNode?.NodeKind === 'CompositeGroup' && { sourceHandle: 'ext-source' }),
       target: edge.ToNodeId,
       animated: true,
       label: `#${edge.Order}`,
@@ -335,7 +358,81 @@ function buildFlowFromFormula(formula) {
     };
   });
 
-  return { nodes: allReactFlowNodes, edges: reactFlowEdges };
+  const compositeInnerEdges = [];
+  for (const [compositeNodeId, memberEdgeIds] of compositeEdgeMembersMap.entries()) {
+    const members = compositeNodeMembersMap.get(compositeNodeId) ?? [];
+    const childIdsByMemberNodeId = childNodeIdByCompositeNode.get(compositeNodeId);
+    if (!childIdsByMemberNodeId) {
+      continue;
+    }
+
+    const memberById = new Map(members.map((member) => [member.MemberNodeId, member]));
+
+    memberEdgeIds.forEach((memberEdgeId, index) => {
+      const memberEdge = edgeById.get(memberEdgeId);
+      if (!memberEdge) {
+        return;
+      }
+
+      const source = childIdsByMemberNodeId.get(memberEdge.FromNodeId);
+      const target = childIdsByMemberNodeId.get(memberEdge.ToNodeId);
+      if (!source || !target) {
+        return;
+      }
+
+      const sourceMember = memberById.get(memberEdge.FromNodeId);
+      const sourceKind = NODE_KIND_TO_UI_KIND[sourceMember?.MemberNodeKind] ?? 'operation';
+
+      compositeInnerEdges.push({
+        id: `${compositeNodeId}__inner__${memberEdge.Id}__${index}`,
+        source,
+        target,
+        animated: true,
+        label: `#${memberEdge.Order}`,
+        style: { stroke: UI_KIND_COLORS[sourceKind] ?? 'rgba(120,128,144,0.5)' },
+      });
+    });
+  }
+
+  const compositeEntryExitEdges = [];
+  for (const node of visibleNodes) {
+    if (node.NodeKind !== 'CompositeGroup') continue;
+    const nodeData = node.NodeData ? JSON.parse(node.NodeData) : {};
+    const entryNodeId = nodeData.EntryNodeId;
+    const exitNodeId = nodeData.ExitNodeId;
+    const childIdsByMemberNodeId = childNodeIdByCompositeNode.get(node.Id);
+    if (!childIdsByMemberNodeId) continue;
+
+    if (entryNodeId) {
+      const entryChildNodeId = childIdsByMemberNodeId.get(entryNodeId);
+      if (entryChildNodeId) {
+        compositeEntryExitEdges.push({
+          id: `${node.Id}__entry__${entryNodeId}`,
+          source: node.Id,
+          sourceHandle: 'inner-source',
+          target: entryChildNodeId,
+          animated: false,
+          style: { stroke: 'rgba(230,80,230,0.5)', strokeDasharray: '5 3' },
+        });
+      }
+    }
+
+    if (exitNodeId) {
+      const exitChildNodeId = childIdsByMemberNodeId.get(exitNodeId);
+      if (exitChildNodeId) {
+        compositeEntryExitEdges.push({
+          id: `${node.Id}__exit__${exitNodeId}`,
+          source: exitChildNodeId,
+          target: node.Id,
+          targetHandle: 'inner-target',
+          animated: false,
+          style: { stroke: 'rgba(230,80,230,0.5)', strokeDasharray: '5 3' },
+        });
+      }
+    }
+  }
+
+  return { nodes: allReactFlowNodes, edges: [...reactFlowEdges, ...compositeInnerEdges, ...compositeEntryExitEdges] };
 }
 
 const FORMULA_LABELS = {
