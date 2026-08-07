@@ -422,3 +422,21 @@
   border-radius: 6px;
 }
 .react-flow__attribution { display: none; }
+
+/* Meta section inside nodes */
+.node-meta-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 0 14px;
+}
+
+.node-meta-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #4a7aff;
+  padding: 5px 14px 2px;
+  opacity: 0.7;
+}

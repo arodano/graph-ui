@@ -67,6 +67,33 @@ function FlowNode({ data, selected }) {
         </div>
       )}
 
+      {data.meta && (
+        <>
+          <div className="node-meta-divider" />
+          <div className="node-meta-title">Metadata</div>
+          <div className="node-body">
+            {data.meta.GroupExpr && (
+              <div className="node-field">
+                <span className="field-key">group</span>
+                <span className="field-value">{data.meta.GroupExpr}</span>
+              </div>
+            )}
+            {data.meta.ServiceExpr && (
+              <div className="node-field">
+                <span className="field-key">service</span>
+                <span className="field-value">{data.meta.ServiceExpr}</span>
+              </div>
+            )}
+            {data.meta.AdditionalInfoExpr && (
+              <div className="node-field">
+                <span className="field-key">info</span>
+                <span className="field-value">{data.meta.AdditionalInfoExpr}</span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
       <Handle type="source" position={Position.Right} />
     </div>
   );
@@ -126,6 +153,8 @@ function buildFlowFromFormula(formula) {
   const parameterDefinitions = formula?.ParameterDefinitions ?? [];
   const compositeNodeMembers = formula?.CompositeNodeMembers ?? [];
   const compositeEdgeMembers = formula?.CompositeEdgeMembers ?? [];
+  const metaNodes = formula?.MetaNodes ?? [];
+  const metaByNodeId = new Map(metaNodes.map((m) => [m.AssociatedNodeId, m]));
 
   // Build lookup maps: compositeNodeId -> full member entries
   const compositeNodeMembersMap = new Map();
@@ -264,6 +293,7 @@ function buildFlowFromFormula(formula) {
             kind: memberUiKind,
             label: member.MemberLabel,
             fields: memberFields,
+            meta: metaByNodeId.get(member.MemberNodeId) ?? null,
           },
           style: { width: CHILD_NODE_WIDTH },
         });
@@ -328,6 +358,7 @@ function buildFlowFromFormula(formula) {
         kind: uiKind,
         label: node.Label,
         fields,
+        meta: metaByNodeId.get(node.Id) ?? null,
       },
     };
   });
@@ -498,6 +529,8 @@ function FlowCanvas({ formula }) {
           };
           return map[n.data?.kind] ?? '#4a5268';
         }}
+        zoomable 
+        pannable
         maskColor="rgba(11,13,18,0.85)"
       />
     </ReactFlow>

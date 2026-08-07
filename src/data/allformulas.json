@@ -133,6 +133,15 @@
           "ValueType": "string",
           "Description": "Container type to filter, e.g. B2C"
         }
+      ],
+      "MetaNodes": [
+        {
+          "Id": "A1AD6695-9B69-4B71-AAA6-F2BD59CEA9E9",
+          "AssociatedNodeId": "11111111-0001-0000-0000-000000000006",
+          "GroupExpr": "const:CONCEPT",
+          "ServiceExpr": "field:Concept",
+          "AdditionalInfoExpr": "output:count"
+        }
       ]
     },
     {
@@ -190,6 +199,15 @@
           "ParameterName": "ConceptFilter",
           "ValueType": "string",
           "Description": "Concept name to filter by"
+        }
+      ],
+      "MetaNodes": [
+        {
+          "Id": "0462F73B-830F-404C-8653-E9CF8E9DBBB2",
+          "AssociatedNodeId": "22222222-0001-0000-0000-000000000003",
+          "GroupExpr": "const:POLYGON",
+          "ServiceExpr": "field:PolygonCodeH3R12",
+          "AdditionalInfoExpr": "output:count"
         }
       ]
     },
@@ -1049,6 +1067,125 @@
           "NodeData": "{\"ParameterName\":\"RETIRO_B2C_P3\",\"ValueType\":\"decimal\"}"
         },
         {
+          "Id": "EE1FD7D1-E35D-44A8-AC0E-04160590D766",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RECAMBIO.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RECAMBIO.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "EE6F1966-2291-4523-A46A-0921FDB89C92",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_CORPORATIVA.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "46B875B1-A9B6-46A6-AE23-2B93B2741BF5",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BOLSINES.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BOLSINES.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "C8C11C72-3B20-47A2-A052-2E9F79E055EB",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_INTERNACIONAL.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "99948A7B-677A-4F7C-A84F-3270D3B155EF",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "SERVICIO_FINANCIERO.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "7E98A30B-40F5-4207-9D6D-44478FA9AC77",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "CAJA_PACK.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"CAJA_PACK.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "FC7ECEA0-5B0A-4387-B2D8-4481A9B7DD63",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_SIMPLE.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "5120E68C-93D4-48E2-A795-4D0A600E9A0E",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "RETIRO_B2C.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"RETIRO_B2C.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "99881C17-34E4-4DC7-B8A6-4E2A5A5874B2",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES_PORTABILIDAD.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "091D80E7-A73A-4A95-A373-6293244D65BD",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "MENSAJERIA_VIP.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"MENSAJERIA_VIP.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "8528384D-BFB9-4BDF-9305-6A0593C186B3",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDAS.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDAS.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "334A816A-2359-4F17-A77C-A9E6057180FF",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "ENCOMIENDA_GC.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"ENCOMIENDA_GC.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "3E7D4AE7-DA78-4A0B-9118-BEA154A3449D",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "VENTA_DIRECTA.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"VENTA_DIRECTA.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "4027B0B8-0B8B-4C56-8D4A-C4B7393A0C6B",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "BODEGAS.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"BODEGAS.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "F4FB129E-4799-4C09-9E61-C62911D77CE6",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "DOCUMENTO_ANDREANI.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "B0AC12A2-908C-417B-B139-D21541199940",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "GESTIONES.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"GESTIONES.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
+          "Id": "BFC25250-F00F-490A-9076-D2C2D6C85637",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "Label": "INFORME_RENDICION.ConceptList",
+          "NodeKind": "ParameterInput",
+          "NodeData": "{\"ParameterName\":\"INFORME_RENDICION.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "Id": "88888888-0301-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "Qty_ENCOMIENDAS",
@@ -1550,119 +1687,119 @@
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "ENCOMIENDAS",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0102-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "RECAMBIO",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0103-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "ENCOMIENDA_CORPORATIVA",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0104-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "ENCOMIENDA_INTERNACIONAL",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0105-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "INFORME_RENDICION",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0106-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "BOLSINES",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0107-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "BODEGAS",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0108-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "VENTA_DIRECTA",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0109-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "SERVICIO_FINANCIERO",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-010A-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "MENSAJERIA_VIP",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-010B-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "CAJA_PACK",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-010C-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "MENSAJERIA_SIMPLE",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-010D-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "DOCUMENTO_ANDREANI",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-010E-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "ENCOMIENDA_GC",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-010F-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "GESTIONES",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0110-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "GESTIONES_PORTABILIDAD",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0111-0000-0000-000000000001",
           "FormulaId": "88888888-0000-0000-0000-000000000001",
           "Label": "RETIRO_B2C",
           "NodeKind": "CompositeGroup",
-          "NodeData": "{\"CompositeGroupName\":\"FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
+          "NodeData": "{\"CompositeGroupName\":\"Group_FiltroConcepto\",\"EntryNodeId\":\"88888888-0001-1111-0000-000000000001\",\"ExitNodeId\":\"88888888-0001-1111-0000-000000000001\"}"
         },
         {
           "Id": "88888888-0000-0004-0000-000000000001",
@@ -3233,6 +3370,195 @@
           "FromNodeId": "88888888-0C11-0000-0000-000000000001",
           "ToNodeId": "88888888-0000-0002-0000-000000000001",
           "Order": 16
+        },
+        {
+          "Id": "38A91902-BE98-4C22-8977-08FDA612A064",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "46B875B1-A9B6-46A6-AE23-2B93B2741BF5",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "BDFE292F-A49B-4E22-A171-20364A043427",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "C8C11C72-3B20-47A2-A052-2E9F79E055EB",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "F58DC79E-43D3-44AC-B614-21883C5774A4",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "F4FB129E-4799-4C09-9E61-C62911D77CE6",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "7F54CBBF-8513-42B9-A680-3D6EF603C8D1",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "4027B0B8-0B8B-4C56-8D4A-C4B7393A0C6B",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "581C4355-117A-4F33-B6DC-6D1EEEFA6EBA",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "B0AC12A2-908C-417B-B139-D21541199940",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "528588FC-8D1B-4AE9-B4A7-6FD35E350643",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "334A816A-2359-4F17-A77C-A9E6057180FF",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "EA2454DF-CE71-4618-830D-7A86DE8165F5",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "8528384D-BFB9-4BDF-9305-6A0593C186B3",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "BBA10D91-ED8D-44DA-A6A3-85611AC3660F",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "EE1FD7D1-E35D-44A8-AC0E-04160590D766",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "BB58B635-A677-4427-A79B-95DF2CB419BA",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "99881C17-34E4-4DC7-B8A6-4E2A5A5874B2",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "7298A1CE-DDA7-4895-831C-A3D4DF4403B0",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "EE6F1966-2291-4523-A46A-0921FDB89C92",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "78B7E598-C960-403B-B912-ACB6FC5363B6",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "99948A7B-677A-4F7C-A84F-3270D3B155EF",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "BDFECA38-F641-44DC-AB09-ACFE2897E52A",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "BFC25250-F00F-490A-9076-D2C2D6C85637",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "24C26210-3D9D-4D64-9856-C67BA13C7E7D",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "FC7ECEA0-5B0A-4387-B2D8-4481A9B7DD63",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "64378582-82CB-4C77-A4C2-D99CA73A2C25",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "3E7D4AE7-DA78-4A0B-9118-BEA154A3449D",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "EA158FE1-D9E6-4977-BB94-EC76AC35A10F",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "091D80E7-A73A-4A95-A373-6293244D65BD",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "FB5AAE3D-5386-4D2F-9741-F1B31BA7BF7C",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "5120E68C-93D4-48E2-A795-4D0A600E9A0E",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        },
+        {
+          "Id": "63F12D65-C096-410C-9CBE-FC0115452054",
+          "FormulaId": "88888888-0000-0000-0000-000000000001",
+          "FromNodeId": "7E98A30B-40F5-4207-9D6D-44478FA9AC77",
+          "ToNodeId": "88888888-0001-1111-0000-000000000001",
+          "Order": 0
+        }
+      ],
+      "CompositeEdgeMembers": [
+        {
+          "CompositeNodeId": "88888888-0101-0000-0000-000000000001",
+          "MemberEdgeId": "EA2454DF-CE71-4618-830D-7A86DE8165F5"
+        },
+        {
+          "CompositeNodeId": "88888888-0102-0000-0000-000000000001",
+          "MemberEdgeId": "BBA10D91-ED8D-44DA-A6A3-85611AC3660F"
+        },
+        {
+          "CompositeNodeId": "88888888-0103-0000-0000-000000000001",
+          "MemberEdgeId": "7298A1CE-DDA7-4895-831C-A3D4DF4403B0"
+        },
+        {
+          "CompositeNodeId": "88888888-0104-0000-0000-000000000001",
+          "MemberEdgeId": "BDFE292F-A49B-4E22-A171-20364A043427"
+        },
+        {
+          "CompositeNodeId": "88888888-0105-0000-0000-000000000001",
+          "MemberEdgeId": "BDFECA38-F641-44DC-AB09-ACFE2897E52A"
+        },
+        {
+          "CompositeNodeId": "88888888-0106-0000-0000-000000000001",
+          "MemberEdgeId": "38A91902-BE98-4C22-8977-08FDA612A064"
+        },
+        {
+          "CompositeNodeId": "88888888-0107-0000-0000-000000000001",
+          "MemberEdgeId": "7F54CBBF-8513-42B9-A680-3D6EF603C8D1"
+        },
+        {
+          "CompositeNodeId": "88888888-0108-0000-0000-000000000001",
+          "MemberEdgeId": "64378582-82CB-4C77-A4C2-D99CA73A2C25"
+        },
+        {
+          "CompositeNodeId": "88888888-0109-0000-0000-000000000001",
+          "MemberEdgeId": "78B7E598-C960-403B-B912-ACB6FC5363B6"
+        },
+        {
+          "CompositeNodeId": "88888888-010A-0000-0000-000000000001",
+          "MemberEdgeId": "EA158FE1-D9E6-4977-BB94-EC76AC35A10F"
+        },
+        {
+          "CompositeNodeId": "88888888-010B-0000-0000-000000000001",
+          "MemberEdgeId": "63F12D65-C096-410C-9CBE-FC0115452054"
+        },
+        {
+          "CompositeNodeId": "88888888-010C-0000-0000-000000000001",
+          "MemberEdgeId": "24C26210-3D9D-4D64-9856-C67BA13C7E7D"
+        },
+        {
+          "CompositeNodeId": "88888888-010D-0000-0000-000000000001",
+          "MemberEdgeId": "F58DC79E-43D3-44AC-B614-21883C5774A4"
+        },
+        {
+          "CompositeNodeId": "88888888-010E-0000-0000-000000000001",
+          "MemberEdgeId": "528588FC-8D1B-4AE9-B4A7-6FD35E350643"
+        },
+        {
+          "CompositeNodeId": "88888888-010F-0000-0000-000000000001",
+          "MemberEdgeId": "581C4355-117A-4F33-B6DC-6D1EEEFA6EBA"
+        },
+        {
+          "CompositeNodeId": "88888888-0110-0000-0000-000000000001",
+          "MemberEdgeId": "BB58B635-A677-4427-A79B-95DF2CB419BA"
+        },
+        {
+          "CompositeNodeId": "88888888-0111-0000-0000-000000000001",
+          "MemberEdgeId": "FB5AAE3D-5386-4D2F-9741-F1B31BA7BF7C"
         }
       ],
       "CompositeNodeMembers": [
@@ -3244,11 +3570,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-0101-0000-0000-000000000001",
+          "MemberNodeId": "8528384D-BFB9-4BDF-9305-6A0593C186B3",
+          "MemberLabel": "ENCOMIENDAS.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"ENCOMIENDAS.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-0102-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-0102-0000-0000-000000000001",
+          "MemberNodeId": "EE1FD7D1-E35D-44A8-AC0E-04160590D766",
+          "MemberLabel": "RECAMBIO.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"RECAMBIO.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-0103-0000-0000-000000000001",
@@ -3258,11 +3598,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-0103-0000-0000-000000000001",
+          "MemberNodeId": "EE6F1966-2291-4523-A46A-0921FDB89C92",
+          "MemberLabel": "ENCOMIENDA_CORPORATIVA.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"ENCOMIENDA_CORPORATIVA.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-0104-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-0104-0000-0000-000000000001",
+          "MemberNodeId": "C8C11C72-3B20-47A2-A052-2E9F79E055EB",
+          "MemberLabel": "ENCOMIENDA_INTERNACIONAL.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"ENCOMIENDA_INTERNACIONAL.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-0105-0000-0000-000000000001",
@@ -3272,11 +3626,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-0105-0000-0000-000000000001",
+          "MemberNodeId": "BFC25250-F00F-490A-9076-D2C2D6C85637",
+          "MemberLabel": "INFORME_RENDICION.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"INFORME_RENDICION.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-0106-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-0106-0000-0000-000000000001",
+          "MemberNodeId": "46B875B1-A9B6-46A6-AE23-2B93B2741BF5",
+          "MemberLabel": "BOLSINES.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"BOLSINES.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-0107-0000-0000-000000000001",
@@ -3286,11 +3654,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-0107-0000-0000-000000000001",
+          "MemberNodeId": "4027B0B8-0B8B-4C56-8D4A-C4B7393A0C6B",
+          "MemberLabel": "BODEGAS.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"BODEGAS.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-0108-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-0108-0000-0000-000000000001",
+          "MemberNodeId": "3E7D4AE7-DA78-4A0B-9118-BEA154A3449D",
+          "MemberLabel": "VENTA_DIRECTA.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"VENTA_DIRECTA.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-0109-0000-0000-000000000001",
@@ -3300,11 +3682,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-0109-0000-0000-000000000001",
+          "MemberNodeId": "99948A7B-677A-4F7C-A84F-3270D3B155EF",
+          "MemberLabel": "SERVICIO_FINANCIERO.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"SERVICIO_FINANCIERO.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-010A-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-010A-0000-0000-000000000001",
+          "MemberNodeId": "091D80E7-A73A-4A95-A373-6293244D65BD",
+          "MemberLabel": "MENSAJERIA_VIP.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"MENSAJERIA_VIP.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-010B-0000-0000-000000000001",
@@ -3314,11 +3710,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-010B-0000-0000-000000000001",
+          "MemberNodeId": "7E98A30B-40F5-4207-9D6D-44478FA9AC77",
+          "MemberLabel": "CAJA_PACK.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"CAJA_PACK.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-010C-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-010C-0000-0000-000000000001",
+          "MemberNodeId": "FC7ECEA0-5B0A-4387-B2D8-4481A9B7DD63",
+          "MemberLabel": "MENSAJERIA_SIMPLE.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"MENSAJERIA_SIMPLE.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-010D-0000-0000-000000000001",
@@ -3328,11 +3738,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-010D-0000-0000-000000000001",
+          "MemberNodeId": "F4FB129E-4799-4C09-9E61-C62911D77CE6",
+          "MemberLabel": "DOCUMENTO_ANDREANI.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"DOCUMENTO_ANDREANI.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-010E-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-010E-0000-0000-000000000001",
+          "MemberNodeId": "334A816A-2359-4F17-A77C-A9E6057180FF",
+          "MemberLabel": "ENCOMIENDA_GC.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"ENCOMIENDA_GC.ConceptList\",\"ValueType\":\"string\"}"
         },
         {
           "CompositeNodeId": "88888888-010F-0000-0000-000000000001",
@@ -3342,6 +3766,13 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-010F-0000-0000-000000000001",
+          "MemberNodeId": "B0AC12A2-908C-417B-B139-D21541199940",
+          "MemberLabel": "GESTIONES.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"GESTIONES.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-0110-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
@@ -3349,11 +3780,25 @@
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
         },
         {
+          "CompositeNodeId": "88888888-0110-0000-0000-000000000001",
+          "MemberNodeId": "99881C17-34E4-4DC7-B8A6-4E2A5A5874B2",
+          "MemberLabel": "GESTIONES_PORTABILIDAD.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"GESTIONES_PORTABILIDAD.ConceptList\",\"ValueType\":\"string\"}"
+        },
+        {
           "CompositeNodeId": "88888888-0111-0000-0000-000000000001",
           "MemberNodeId": "88888888-0001-1111-0000-000000000001",
           "MemberLabel": "FiltroConcepto",
           "MemberNodeKind": "Filter",
           "MemberNodeData": "{\"FilterExpression\":\"item.Concept in param.ConceptList\"}"
+        },
+        {
+          "CompositeNodeId": "88888888-0111-0000-0000-000000000001",
+          "MemberNodeId": "5120E68C-93D4-48E2-A795-4D0A600E9A0E",
+          "MemberLabel": "RETIRO_B2C.ConceptList",
+          "MemberNodeKind": "ParameterInput",
+          "MemberNodeData": "{\"ParameterName\":\"RETIRO_B2C.ConceptList\",\"ValueType\":\"string\"}"
         }
       ],
       "ParameterDefinitions": [
@@ -4309,6 +4754,36 @@
           "ValueType": "decimal",
           "Description": "Precio segmento 3 del grupo RETIRO_B2C"
         }
+      ],
+      "MetaNodes": [
+        {
+          "Id": "4A1C8F4C-44EA-4621-BADA-5E5617331FF4",
+          "AssociatedNodeId": "88888888-0205-0000-0000-000000000001",
+          "GroupExpr": "const:CONTAINER",
+          "ServiceExpr": "field:ContainerId",
+          "AdditionalInfoExpr": "output:count"
+        },
+        {
+          "Id": "AD25FE16-CE26-4F78-8AB4-6C54D9F6D9BE",
+          "AssociatedNodeId": "88888888-0203-0000-0000-000000000001",
+          "GroupExpr": "const:CONTAINER",
+          "ServiceExpr": "field:ContainerId",
+          "AdditionalInfoExpr": "output:count"
+        },
+        {
+          "Id": "BAA576C6-3FA4-48F5-9E13-C0E2743ABF03",
+          "AssociatedNodeId": "88888888-0208-0000-0000-000000000001",
+          "GroupExpr": "const:CONTAINER",
+          "ServiceExpr": "field:ContainerId",
+          "AdditionalInfoExpr": "output:count"
+        },
+        {
+          "Id": "4EA5147C-19BB-41E5-9C3E-DA94A50F51A0",
+          "AssociatedNodeId": "88888888-020D-0000-0000-000000000001",
+          "GroupExpr": "const:CONTAINER",
+          "ServiceExpr": "field:ContainerId",
+          "AdditionalInfoExpr": "output:count"
+        }
       ]
     },
     {
@@ -4744,6 +5219,15 @@
           "ParameterName": "Radio60a90000.UpperBound",
           "ValueType": "decimal",
           "Description": "Radio 60-90000: límite superior"
+        }
+      ],
+      "MetaNodes": [
+        {
+          "Id": "3474C96C-F356-4813-BF0D-BF44C04371EF",
+          "AssociatedNodeId": "55555555-0001-0000-0000-000000000005",
+          "GroupExpr": "const:VEHICLE",
+          "ServiceExpr": "field:PolygonCodeH3R12",
+          "AdditionalInfoExpr": "output:count"
         }
       ]
     },
@@ -5258,6 +5742,15 @@
           "ValueType": "string",
           "Description": "Concept name for groupt B node to filter by"
         }
+      ],
+      "MetaNodes": [
+        {
+          "Id": "96E08037-6629-4ADA-B2BE-625F6F284492",
+          "AssociatedNodeId": "33333333-0001-1100-0000-000000000003",
+          "GroupExpr": "const:POLYGON",
+          "ServiceExpr": "field:PolygonCodeH3R12",
+          "AdditionalInfoExpr": "output:count"
+        }
       ]
     },
     {
@@ -5315,6 +5808,15 @@
           "ParameterName": "UpperBound",
           "ValueType": "decimal",
           "Description": "Límite superior del radio (km, excluido)"
+        }
+      ],
+      "MetaNodes": [
+        {
+          "Id": "DA4BFA18-9CE1-4EB9-95CC-5208CCF25E69",
+          "AssociatedNodeId": "44444444-0001-0000-0000-000000000003",
+          "GroupExpr": "const:UPPER_BOUND",
+          "ServiceExpr": "field:Concept",
+          "AdditionalInfoExpr": "param:UpperBound"
         }
       ]
     }
