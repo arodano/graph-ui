@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import dagre from '@dagrejs/dagre';
 import {
   ReactFlow,
   Background,
@@ -10,6 +11,7 @@ import {
   addEdge,
   Handle,
   Position,
+  NodeResizer,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import './App.css';
@@ -33,7 +35,7 @@ const STATUS_LABELS = { running: 'Running', idle: 'Idle', error: 'Error' };
 
 const CHILD_NODE_WIDTH = 210;
 const CHILD_NODE_HEIGHT = 110;
-const CHILD_PADDING = 16;
+const CHILD_PADDING = 40;
 const GROUP_HEADER_HEIGHT = 48;
 
 function FlowNode({ data, selected }) {
@@ -103,8 +105,15 @@ function CompositeGroupNode({ data, selected }) {
   return (
     <div
       className={`composite-group-node ${selected ? 'selected' : ''}`}
-      style={{ width: data.groupWidth, height: data.groupHeight }}
+      style={{ width: '100%', height: '100%' }}
     >
+      <NodeResizer
+        isVisible={selected}
+        minWidth={data.groupWidth}
+        minHeight={data.groupHeight}
+        lineStyle={{ borderColor: 'rgba(230,80,230,0.6)' }}
+        handleStyle={{ backgroundColor: 'rgba(230,80,230,0.8)', borderColor: 'rgba(230,80,230,1)' }}
+      />
       <Handle id="ext-target" type="target" position={Position.Left} />
       <Handle id="inner-source" type="source" position={Position.Left} style={{ opacity: 0, width: 0, height: 0, minWidth: 0, minHeight: 0, padding: 0 }} />
       <div className="composite-group-header">
@@ -146,6 +155,48 @@ const UI_KIND_COLORS = {
   compositeGroup: 'rgba(230,80,230,0.5)',
   output: 'rgba(240,80,110,0.5)',
 };
+
+function getNodeDimensions(node) {
+  if (node.type === 'compositeGroupNode') {
+    return {
+      width: typeof node.style?.width === 'number' ? node.style.width : node.data.groupWidth,
+      height: typeof node.style?.height === 'number' ? node.style.height : node.data.groupHeight,
+    };
+  }
+  const fieldCount = (node.data.fields ?? []).length;
+  const hasMeta = node.data.meta != null;
+  return { width: 220, height: Math.max(110, 48 + 28 + fieldCount * 26 + (hasMeta ? 76 : 0)) };
+}
+
+function applyDagreLayout(nodes, topLevelEdges) {
+  const g = new dagre.graphlib.Graph();
+  g.setDefaultEdgeLabel(() => ({}));
+  g.setGraph({ rankdir: 'LR', nodesep: 50, ranksep: 200, marginx: 60, marginy: 60 });
+
+  const topLevelNodes = nodes.filter((n) => !n.parentId);
+  const topLevelNodeIdSet = new Set(topLevelNodes.map((n) => n.id));
+
+  for (const node of topLevelNodes) {
+    const { width, height } = getNodeDimensions(node);
+    g.setNode(node.id, { width, height });
+  }
+
+  for (const edge of topLevelEdges) {
+    if (topLevelNodeIdSet.has(edge.source) && topLevelNodeIdSet.has(edge.target)) {
+      g.setEdge(edge.source, edge.target);
+    }
+  }
+
+  dagre.layout(g);
+
+  return nodes.map((node) => {
+    if (node.parentId) return node;
+    const dn = g.node(node.id);
+    if (!dn) return node;
+    const { width, height } = getNodeDimensions(node);
+    return { ...node, position: { x: dn.x - width / 2, y: dn.y - height / 2 } };
+  });
+}
 
 function buildFlowFromFormula(formula) {
   const nodes = formula?.Nodes ?? [];
@@ -189,51 +240,10 @@ function buildFlowFromFormula(formula) {
     ]),
   );
 
-  const inDegree = new Map(visibleNodes.map((node) => [node.Id, 0]));
-  const outgoing = new Map(visibleNodes.map((node) => [node.Id, []]));
-
-  for (const edge of visibleEdges) {
-    inDegree.set(edge.ToNodeId, (inDegree.get(edge.ToNodeId) ?? 0) + 1);
-    const fromEdges = outgoing.get(edge.FromNodeId);
-    if (fromEdges) {
-      fromEdges.push(edge);
-    }
-  }
-
-  const queue = [];
-  const levelByNodeId = new Map();
-
-  for (const node of visibleNodes) {
-    if ((inDegree.get(node.Id) ?? 0) === 0) {
-      queue.push(node.Id);
-      levelByNodeId.set(node.Id, 0);
-    }
-  }
-
-  while (queue.length > 0) {
-    const currentNodeId = queue.shift();
-    const currentLevel = levelByNodeId.get(currentNodeId) ?? 0;
-    const outgoingEdges = outgoing.get(currentNodeId) ?? [];
-
-    for (const edge of outgoingEdges) {
-      const nextNodeId = edge.ToNodeId;
-      levelByNodeId.set(nextNodeId, Math.max(levelByNodeId.get(nextNodeId) ?? 0, currentLevel + 1));
-      inDegree.set(nextNodeId, (inDegree.get(nextNodeId) ?? 0) - 1);
-      if ((inDegree.get(nextNodeId) ?? 0) === 0) {
-        queue.push(nextNodeId);
-      }
-    }
-  }
-
-  const layerCounts = new Map();
   const childNodes = [];
   const childNodeIdByCompositeNode = new Map();
 
   const reactFlowNodes = visibleNodes.map((node) => {
-    const layer = levelByNodeId.get(node.Id) ?? 0;
-    const row = layerCounts.get(layer) ?? 0;
-    layerCounts.set(layer, row + 1);
-
     const uiKind = NODE_KIND_TO_UI_KIND[node.NodeKind] ?? 'operation';
     const nodeData = node.NodeData ? JSON.parse(node.NodeData) : {};
 
@@ -306,7 +316,7 @@ function buildFlowFromFormula(formula) {
       return {
         id: node.Id,
         type: 'compositeGroupNode',
-        position: { x: 80 + layer * 300, y: 120 + row * 170 },
+        position: { x: 0, y: 0 },
         data: {
           label: nodeData.CompositeGroupName ?? node.Label,
           groupWidth,
@@ -353,7 +363,7 @@ function buildFlowFromFormula(formula) {
     return {
       id: node.Id,
       type: 'flowNode',
-      position: { x: 80 + layer * 300, y: 120 + row * 170 },
+      position: { x: 0, y: 0 },
       data: {
         kind: uiKind,
         label: node.Label,
@@ -463,7 +473,8 @@ function buildFlowFromFormula(formula) {
     }
   }
 
-  return { nodes: allReactFlowNodes, edges: [...reactFlowEdges, ...compositeInnerEdges, ...compositeEntryExitEdges] };
+  const layoutedNodes = applyDagreLayout(allReactFlowNodes, reactFlowEdges);
+  return { nodes: layoutedNodes, edges: [...reactFlowEdges, ...compositeInnerEdges, ...compositeEntryExitEdges] };
 }
 
 const FORMULA_LABELS = {
@@ -503,6 +514,7 @@ function FlowCanvas({ formula }) {
       fitView
       fitViewOptions={{ padding: 0.15 }}
       proOptions={{ hideAttribution: true }}
+      minZoom={0.3}
     >
       <Background
         variant={BackgroundVariant.Dots}
