@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Graph Visualizer</title>
+    <style>
+        :root {
+            --scroll-track: #070d16;
+            --scroll-thumb: #1a3a5a;
+            --scroll-thumb-hover: #24527e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #000; display: flex; }
+
+        /* Unified scrollbar style across app panels */
+        #palette,
+        .sb-section.grow,
+        .sb-tbl-scroll,
+        #sb-params-preview,
+        #sb-exec-result,
+        #pkt-box,
+        #debug-panel {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+        }
+
+        #palette::-webkit-scrollbar,
+        .sb-section.grow::-webkit-scrollbar,
+        .sb-tbl-scroll::-webkit-scrollbar,
+        #sb-params-preview::-webkit-scrollbar,
+        #sb-exec-result::-webkit-scrollbar,
+        #pkt-box::-webkit-scrollbar,
+        #debug-panel::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        #palette::-webkit-scrollbar-track,
+        .sb-section.grow::-webkit-scrollbar-track,
+        .sb-tbl-scroll::-webkit-scrollbar-track,
+        #sb-params-preview::-webkit-scrollbar-track,
+        #sb-exec-result::-webkit-scrollbar-track,
+        #pkt-box::-webkit-scrollbar-track,
+        #debug-panel::-webkit-scrollbar-track {
+            background: var(--scroll-track);
+            border-radius: 8px;
+        }
+
+        #palette::-webkit-scrollbar-thumb,
+        .sb-section.grow::-webkit-scrollbar-thumb,
+        .sb-tbl-scroll::-webkit-scrollbar-thumb,
+        #sb-params-preview::-webkit-scrollbar-thumb,
+        #sb-exec-result::-webkit-scrollbar-thumb,
+        #pkt-box::-webkit-scrollbar-thumb,
+        #debug-panel::-webkit-scrollbar-thumb {
+            background: var(--scroll-thumb);
+            border-radius: 8px;
+            border: 2px solid var(--scroll-track);
+        }
+
+        #palette::-webkit-scrollbar-thumb:hover,
+        .sb-section.grow::-webkit-scrollbar-thumb:hover,
+        .sb-tbl-scroll::-webkit-scrollbar-thumb:hover,
+        #sb-params-preview::-webkit-scrollbar-thumb:hover,
+        #sb-exec-result::-webkit-scrollbar-thumb:hover,
+        #pkt-box::-webkit-scrollbar-thumb:hover,
+        #debug-panel::-webkit-scrollbar-thumb:hover {
+            background: var(--scroll-thumb-hover);
+        }
+
+        #palette {
+            width: 176px;
+            min-width: 176px;
+            height: 100%;
+            background: #060910;
+            border-right: 1px solid #121c2a;
+            overflow-y: auto;
+            padding: 16px 8px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .pal-header {
+            font: 700 10px 'Courier New', monospace;
+            color: #243040;
+            letter-spacing: 4px;
+            padding: 0 6px 12px;
+        }
+        .pal-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 8px;
+            border-radius: 7px;
+            cursor: grab;
+            user-select: none;
+            transition: background 0.12s;
+        }
+        .pal-item:hover  { background: #0e1620; }
+        .pal-item:active { cursor: grabbing; background: #121e2e; }
+        .pal-badge {
+            font: 700 11px 'Courier New', monospace;
+            padding: 3px 6px;
+            border-radius: 5px;
+            min-width: 34px;
+            text-align: center;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+        }
+        .pal-label {
+            font: 500 12px Arial, sans-serif;
+            color: #526070;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #canvas-wrap  { flex: 1; min-width: 0; height: 100%; overflow: hidden; position: relative; }
+        #renderCanvas { width: 100%; height: 100%; touch-action: none; display: block; }
+
+        .side-toggle-btn {
+            align-self: flex-end;
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            border: 1px solid #1a3050;
+            background: #0a1828;
+            color: #4a90c0;
+            font: 700 11px 'Courier New', monospace;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            margin: 0 0 8px 0;
+        }
+        .side-toggle-btn:hover { background: #0e2038; }
+
+        /* ── Right sidebar ── */
+        #sidebar {
+            width: 300px; min-width: 300px; height: calc(100% - 300px); /* Adjust for debug footer */
+            background: #060910; border-left: 1px solid #121c2a;
+            display: flex; flex-direction: column; overflow: hidden;
+            font-family: 'Courier New', monospace; color: #6a9ab8;
+            position: relative;
+            z-index: 200; /* Higher than debug footer's 100 */
+        }
+
+        #palette,
+        #sidebar {
+            transition: width 0.22s ease, min-width 0.22s ease, padding 0.22s ease;
+        }
+
+        #palette.collapsed {
+            width: 34px;
+            min-width: 34px;
+            padding: 8px 4px;
+        }
+        #palette.collapsed > :not(#palette-toggle-btn) {
+            display: none !important;
+        }
+
+        #sidebar.collapsed {
+            width: 34px;
+            min-width: 34px;
+            padding: 8px 4px;
+        }
+        #sidebar.collapsed > :not(#sidebar-toggle-btn) {
+            display: none !important;
+        }
+        .sb-section { border-bottom: 1px solid #0e1a28; padding: 10px 12px; flex-shrink: 0; }
+        .sb-section.grow { flex: 1; overflow-y: auto; }
+        .sb-sec-hdr {
+            display: flex; justify-content: space-between; align-items: center;
+            font: 700 10px 'Courier New', monospace; color: #243040; letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        .sb-btn {
+            background: #0a1828; border: 1px solid #1a3050; color: #4a90c0;
+            border-radius: 5px; padding: 3px 10px; cursor: pointer;
+            font: 600 11px 'Courier New', monospace; letter-spacing: 0.5px;
+        }
+        .sb-btn:hover  { background: #0e2038; }
+        .sb-btn:active { background: #142840; }
+        .sb-btn:disabled { opacity: 0.5; cursor: default; }
+        .sb-hint  { font-size: 11px; color: #243040; padding: 4px 0; }
+        .sb-err   { font-size: 11px; color: #c04040; padding: 4px 0; }
+        .sb-count { font-size: 10px; color: #2a5070; margin-bottom: 4px; }
+        .sb-tbl-scroll { overflow: auto; max-height: 160px; }
+        .sb-tbl { border-collapse: collapse; font-size: 10px; white-space: nowrap; }
+        .sb-tbl th { background: #0a1828; color: #2a5070; padding: 3px 8px; text-align: left; position: sticky; top: 0; }
+        .sb-tbl td { padding: 2px 8px; border-bottom: 1px solid #0d1824; }
+        .sb-fitem {
+            padding: 6px 8px; border-radius: 5px; cursor: pointer;
+            display: flex; gap: 8px; align-items: baseline; margin-bottom: 2px;
+        }
+        .sb-fitem:hover  { background: #0e1620; }
+        .sb-fitem.active { background: #0e2038; border: 1px solid #1a3a5a; }
+        .sb-fid   { font-size: 10px; color: #2a5070; flex-shrink: 0; }
+        .sb-fname { font-size: 12px; color: #5a90b0; }
+        #sb-sel-formula { font-size: 11px; color: #4a90c0; margin-top: 4px; min-height: 14px; }
+        #sb-params-preview {
+            font-size: 10px; color: #3a7090; background: #070e1a;
+            border-radius: 5px; padding: 6px; max-height: 80px; overflow-y: auto;
+            white-space: pre-wrap; margin-top: 4px;
+        }
+        #sb-exec-btn {
+            width: 100%; padding: 9px; margin: 8px 0 6px;
+            background: #0a2040; border: 1px solid #1a4060; color: #44BBEE;
+            font: 700 12px 'Courier New', monospace; letter-spacing: 2px;
+            border-radius: 6px; cursor: pointer;
+        }
+        #sb-exec-btn:hover    { background: #0e2a50; }
+        #sb-exec-btn:disabled { opacity: 0.5; cursor: default; }
+        #sb-exec-result {
+            font-size: 10px; color: #3a7a50; background: #060e10;
+            border-radius: 5px; padding: 6px; max-height: 120px;
+            overflow-y: auto; white-space: pre-wrap;
+        }
+
+        /* ── Modal base ── */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.78);
+            z-index: 300; display: none; align-items: center; justify-content: center;
+        }
+        .modal-box {
+            background: #06101e; border: 1px solid #1a3050; border-radius: 12px;
+            padding: 24px 28px; min-width: 360px; max-width: 520px;
+            font-family: 'Courier New', monospace; color: #7ab4d4;
+        }
+        .modal-title { font: 700 12px 'Courier New', monospace; color: #44BBEE;
+            letter-spacing: 2px; margin-bottom: 18px; }
+        .modal-row { margin-bottom: 12px; }
+        .modal-row label { display: block; font-size: 10px; color: #2a5070;
+            letter-spacing: 1px; margin-bottom: 4px; }
+        .modal-row input, .modal-row textarea {
+            width: 100%; background: #070e1a; border: 1px solid #1a3050;
+            border-radius: 5px; padding: 6px 9px; color: #7ab4d4;
+            font: 12px 'Courier New', monospace; box-sizing: border-box;
+        }
+        .modal-row textarea { resize: vertical; height: 180px; }
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+        .modal-err { font-size: 11px; color: #c04040; margin-top: 8px; min-height: 14px; }
+
+        /* ── Packet debug panel ── */
+        #pkt-panel {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.80);
+            z-index: 200;
+            display: none;
+            align-items: center; justify-content: center;
+        }
+        #pkt-box {
+            background: #060e1c;
+            border: 1px solid #1a3050;
+            border-radius: 14px;
+            padding: 26px 30px;
+            width: min(900px, 92vw);
+            max-height: 78vh;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            color: #7ab4d4;
+        }
+        #pkt-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 18px;
+        }
+        #pkt-title { font: 700 12px 'Courier New', monospace; color: #44BBEE; letter-spacing: 2px; }
+        #pkt-close {
+            background: none; border: 1px solid #1a3050; color: #44BBEE;
+            border-radius: 6px; padding: 4px 14px; cursor: pointer;
+            font-family: inherit; font-size: 12px;
+        }
+        #pkt-close:hover { background: #0d1e30; }
+        #pkt-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        #pkt-table th {
+            padding: 6px 10px; text-align: left;
+            border-bottom: 1px solid #152030; color: #2a5070;
+            font-weight: 700; letter-spacing: 1px;
+        }
+        #pkt-table td { padding: 7px 10px; border-bottom: 1px solid #0d1824; vertical-align: top; }
+        #pkt-table tr:hover td { background: #0a1626; }
+        .pc { color: #2a5070; text-align: center; width: 28px; }
+        .pt { background: #0a1828; border-radius: 4px; padding: 2px 6px; color: #4a90c0; font-size: 11px; }
+        .pd { line-height: 1.6; }
+        .pk { color: #2a6090; }
+        .pv { color: #88d8b0; }
+        .pkt-api td { background: #060e14; }
+        .api-lbl { font-size: 10px; color: #2a5070; letter-spacing: 1px; }
+        .api-val { font-size: 10px; color: #5a9070; white-space: pre-wrap; word-break: break-all; }
+
+        /* ── Debug Footer Panel Styles ── */
+        #debug-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 300px;
+            background: #080c14;
+            border-top: 2px solid #1a3050;
+            display: flex;
+            flex-direction: column;
+            z-index: 100; /* Lower than sidebar's 200 */
+            font-family: 'Courier New', monospace;
+            color: #6acc90;
+            transition: height 0.3s ease;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        #debug-footer.collapsed {
+            height: 40px;
+        }
+        
+        /* When debug footer is collapsed, adjust sidebar height */
+        body:has(#debug-footer.collapsed) #sidebar {
+            height: calc(100% - 40px);
+        }
+        
+        /* When debug footer is expanded, adjust sidebar height */
+        body:has(#debug-footer:not(.collapsed)) #sidebar {
+            height: calc(100% - 300px);
+        }
+        
+        .debug-header {
+            background: #0a1828;
+            padding: 8px 16px;
+            border-bottom: 1px solid #152030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        .debug-header:hover {
+            background: #0d1e30;
+        }
+        
+        .debug-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #44BBEE;
+            letter-spacing: 1px;
+        }
+        
+        .debug-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .debug-btn {
+            background: #0d1e30;
+            border: 1px solid #2a4060;
+            color: #6acc90;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s ease;
+        }
+        
+        .debug-btn:hover {
+            background: #1a3050;
+            border-color: #3a6090;
+        }
+        
+        .debug-subtitle {
+            font-size: 11px;
+            color: #3a7090;
+            padding: 6px 16px;
+            border-bottom: 1px solid #152030;
+            background: #070e18;
+        }
+        
+        #debug-panel {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 12px;
+            font-size: 11px;
+        }
+        
+        .debug-entry {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #060e14;
+            border: 1px solid #152030;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .debug-entry:hover {
+            border-color: #2a5070;
+            background: #07101c;
+        }
+        
+        .debug-entry.error {
+            border-left: 4px solid #ff6b6b;
+        }
+        
+        .debug-entry.success {
+            border-left: 4px solid #44BBEE;
+        }
+        
+        .debug-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #0d1824;
+            margin-bottom: 8px;
+        }
+        
+        .debug-entry-title {
+            font-weight: bold;
+            color: #44BBEE;
+            font-size: 12px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .debug-entry-timestamp {
+            color: #3a7090;
+            font-size: 10px;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+        
+        .debug-entry-content {
+            font-size: 10px;
+            color: #88d8b0;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 8px;
+            background: #040a10;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .debug-entry-content.expanded {
+            display: block;
+        }
+        
+        .debug-entry-data {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+        
+        .debug-entry-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #3a7090;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #0d1824;
+        }
+        
+        .debug-entry-inputs {
+            color: #6aacc0;
+        }
+        
+        .debug-entry-status {
+            font-weight: bold;
+        }
+        
+        .debug-entry-status.success {
+            color: #44BBEE;
+        }
+        
+        .debug-entry-status.error {
+            color: #ff6b6b;
+        }
+        
+        #debug-empty {
+            color: #3a7090;
+            font-style: italic;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="palette">
+        <button id="palette-toggle-btn" class="side-toggle-btn" title="Collapse/expand left panel">◀</button>
+        <div class="pal-header">NODE TYPES</div>
+    </div>
+    <div id="canvas-wrap">
+        <canvas id="renderCanvas"></canvas>
+    </div>
+
+    <!-- ── Right sidebar ─────────────────────────────────────────────── -->
+    <div id="sidebar">
+        <button id="sidebar-toggle-btn" class="side-toggle-btn" title="Collapse/expand right panel">▶</button>
+
+        <!-- Items -->
+        <div class="sb-section">
+            <div class="sb-sec-hdr">ITEMS <button class="sb-btn" id="sb-items-btn">Load</button></div>
+            <div id="sb-items-wrap"><div class="sb-hint">No items loaded.</div></div>
+        </div>
+
+        <!-- Formulas -->
+        <div class="sb-section grow">
+            <div class="sb-sec-hdr">FORMULAS <button class="sb-btn" id="sb-formulas-btn">Load</button></div>
+            <div id="sb-sel-formula"></div>
+            <div id="sb-formula-list"><div class="sb-hint">No formulas loaded.</div></div>
+        </div>
+
+        <!-- Parameters -->
+        <div class="sb-section">
+            <div class="sb-sec-hdr">PARAMETERS <button class="sb-btn" id="sb-params-btn">Edit</button></div>
+            <pre id="sb-params-preview"></pre>
+        </div>
+
+        <!-- Execute -->
+        <div class="sb-section">
+            <button id="sb-exec-btn">▶ EXECUTE</button>
+            <div id="sb-exec-result"></div>
+        </div>
+    </div>
+
+    <!-- ── Debug Footer Panel ─────────────────────────────────────────── -->
+    <div id="debug-footer" class="collapsed">
+        <div class="debug-header">
+            <span class="debug-title">NODE DEBUG OUTPUT</span>
+            <div class="debug-controls">
+                <button class="debug-btn" id="debug-clear-btn" title="Clear all debug responses">Clear All</button>
+                <button class="debug-btn" id="debug-toggle-btn" title="Expand/collapse panel">▲</button>
+            </div>
+        </div>
+        <div class="debug-subtitle">Click on a node's play/repeat button to see debug output and results</div>
+        <div id="debug-panel">
+            <div id="debug-empty">No debug responses yet. Click on node play/repeat buttons to see results.</div>
+        </div>
+    </div>
+
+    <!-- ── Modal: Load Items ─────────────────────────────────────────── -->
+    <div id="items-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title">LOAD MASTER DATA ITEMS</div>
+            <div class="modal-row"><label>Branch System ID</label>
+                <input id="si-branch" type="text" /></div>
+            <div class="modal-row"><label>Supplier ID SAP</label>
+                <input id="si-supplier" type="text" /></div>
+            <div class="modal-row"><label>Distributor DNI</label>
+                <input id="si-dni" type="text" /></div>
+            <div class="modal-row"><label>Vehicle Domain</label>
+                <input id="si-vehicle" type="text" /></div>
+            <div class="modal-row"><label>Start Date (yyyyMMdd)</label>
+                <input id="si-start" type="text" /></div>
+            <div class="modal-row"><label>End Date (yyyyMMdd)</label>
+                <input id="si-end" type="text" /></div>
+            <div class="modal-err" id="si-err"></div>
+            <div class="modal-actions">
+                <button class="sb-btn" id="si-cancel">Cancel</button>
+                <button class="sb-btn" id="si-fetch">Fetch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Modal: Edit Parameters ───────────────────────────────────── -->
+    <div id="params-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title">EDIT PARAMETERS</div>
+            <div class="modal-row"><label>Parameters JSON</label>
+                <textarea id="sp-ta"></textarea></div>
+            <div class="modal-err" id="sp-err"></div>
+            <div class="modal-actions">
+                <button class="sb-btn" id="sp-cancel">Cancel</button>
+                <button class="sb-btn" id="sp-save">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Packet debug panel ────────────────────────────────────────── -->
+    <div id="pkt-panel">
+        <div id="pkt-box">
+            <div id="pkt-header">
+                <div id="pkt-title"></div>
+                <button id="pkt-close" onclick="document.getElementById('pkt-panel').style.display='none'">✕ CLOSE</button>
+            </div>
+            <table id="pkt-table">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Node</th><th>Type</th><th>Data</th><th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="pkt-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>

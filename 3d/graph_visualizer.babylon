@@ -1,0 +1,952 @@
+const CARD_WIDTH = 5.2;
+const CARD_DEPTH = 2.7;
+const CARD_THICKNESS = 0.6;
+
+const NODE_COLORS = {
+    NodeAggregate: new BABYLON.Color3(0.12, 0.82, 0.54),
+    NodeCompositeGroup: new BABYLON.Color3(0.67, 0.42, 1.0),
+    NodeConditional: new BABYLON.Color3(1.0, 0.58, 0.2),
+    NodeConstantInput: new BABYLON.Color3(0.2, 0.85, 0.63),
+    NodeFieldSpec: new BABYLON.Color3(0.32, 0.58, 1.0),
+    NodeFilter: new BABYLON.Color3(0.96, 0.68, 0.18),
+    NodeGrouping: new BABYLON.Color3(0.62, 0.46, 1.0),
+    NodeMathOperation: new BABYLON.Color3(0.95, 0.76, 0.22),
+    NodeOutput: new BABYLON.Color3(0.12, 0.85, 0.52),
+    NodeParameterInput: new BABYLON.Color3(0.57, 0.34, 1.0),
+    NodeQuantitySpec: new BABYLON.Color3(0.95, 0.42, 0.2),
+    NodeVariableInput: new BABYLON.Color3(0.32, 0.78, 0.45)
+};
+
+// ============================================================
+// SCENE
+// ============================================================
+
+function createBaseScene(engine) {
+    const scene = new BABYLON.Scene(engine);
+
+    scene.clearColor = new BABYLON.Color4(0.015, 0.018, 0.028, 1);
+
+    return scene;
+}
+
+// ============================================================
+// CAMERA
+// ============================================================
+
+function createIsometricCamera(scene, canvas) {
+    const camera = new BABYLON.ArcRotateCamera(
+        "camera",
+        29,
+        Math.PI / 2.5,
+        100,
+        new BABYLON.Vector3(2, -2, 5),
+        scene
+    );
+
+    camera.attachControl(canvas, true);
+
+    camera.lowerBetaLimit = 0.2;
+    camera.upperBetaLimit = Math.PI / 2.05;
+    camera.panningSensibility = 80;
+
+    setupOrthographicZoom(camera, canvas);
+
+    return camera;
+}
+
+function setupOrthographicZoom(camera, canvas) {
+    camera.mode = BABYLON.Camera.ORTHOGRAPHIC_CAMERA;
+
+    let zoom = 1;
+
+    const BASE_ORTHO_WIDTH = 30;
+    const BASE_ORTHO_HEIGHT = 22;
+
+    function updateOrtho() {
+        const width = BASE_ORTHO_WIDTH * zoom;
+        const height = BASE_ORTHO_HEIGHT * zoom;
+
+        camera.orthoLeft = -width / 2;
+        camera.orthoRight = width / 2;
+        camera.orthoTop = height / 2;
+        camera.orthoBottom = -height / 2;
+    }
+
+    updateOrtho();
+
+    if (camera.inputs.attached.mousewheel) {
+        camera.inputs.attached.mousewheel.detachControl();
+    }
+
+    canvas.addEventListener(
+        "wheel",
+        (event) => {
+            event.preventDefault();
+
+            zoom *= event.deltaY > 0 ? 1.1 : 0.9;
+            zoom = Math.max(0.35, Math.min(3.5, zoom));
+
+            updateOrtho();
+        },
+        { passive: false }
+    );
+}
+
+// ============================================================
+// LIGHTS
+// ============================================================
+
+function createLights(scene) {
+    const hemi = new BABYLON.HemisphericLight(
+        "hemi",
+        new BABYLON.Vector3(0, 1, 0),
+        scene
+    );
+
+    hemi.intensity = 0.75;
+
+    const point = new BABYLON.PointLight(
+        "point",
+        new BABYLON.Vector3(0, 12, 0),
+        scene
+    );
+
+    point.intensity = 0.45;
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function darken(color, amount) {
+    return new BABYLON.Color3(
+        color.r * amount,
+        color.g * amount,
+        color.b * amount
+    );
+}
+
+function hex(color) {
+    const r = Math.round(color.r * 255).toString(16).padStart(2, "0");
+    const g = Math.round(color.g * 255).toString(16).padStart(2, "0");
+    const b = Math.round(color.b * 255).toString(16).padStart(2, "0");
+
+    return `#${r}${g}${b}`;
+}
+
+// ============================================================
+// MATERIALS
+// ============================================================
+
+function createCardMaterial(scene, node) {
+    const color = NODE_COLORS[node.type];
+
+    const material = new BABYLON.StandardMaterial(
+        `${node.id}_material`,
+        scene
+    );
+
+    material.diffuseColor = darken(color, 0.16);
+    material.emissiveColor = darken(color, 0.04);
+    material.specularColor = new BABYLON.Color3(0.12, 0.12, 0.15);
+
+    return material;
+}
+
+// ============================================================
+// TEXTURE
+// ============================================================
+
+function createCardTexture(scene, node) {
+    const texture = new BABYLON.DynamicTexture(
+        `${node.id}_texture`,
+        { width: 1040, height: 540 },
+        scene,
+        false
+    );
+
+    const ctx = texture.getContext();
+
+    ctx.fillStyle = "#0A0E17";
+    ctx.fillRect(0, 0, 1040, 540);
+
+    ctx.fillStyle = hex(NODE_COLORS[node.type]);
+    ctx.fillRect(0, 0, 1040, 92);
+
+    ctx.font = "700 28px Arial";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillText(node.name, 32, 150);
+
+    ctx.font = "500 17px Arial";
+    ctx.fillStyle = "#B8C4D6";
+    ctx.fillText(String(node.value), 32, 220);
+
+    texture.update();
+
+    return texture;
+}
+
+// ============================================================
+// NODE
+// ============================================================
+function createNode(scene, node, state) {
+
+    const root = new BABYLON.TransformNode(
+        node.id,
+        scene
+    );
+
+    root.position.copyFrom(node.position);
+
+    node.root = root;
+    state.nodesById[node.id] = node;
+
+    // ========================================================
+    // CARD
+    // ========================================================
+
+    const card = BABYLON.MeshBuilder.CreateBox(
+        `${node.id}_card`,
+        {
+            width: CARD_WIDTH,
+            height: CARD_THICKNESS,
+            depth: CARD_DEPTH
+        },
+        scene
+    );
+
+    card.parent = root;
+
+    card.position.y =
+        CARD_THICKNESS / 2;
+
+    card.material =
+        createCardMaterial(scene, node);
+
+    // ========================================================
+    // TOP TEXTURE
+    // ========================================================
+
+    const plane = BABYLON.MeshBuilder.CreatePlane(
+        `${node.id}_top`,
+        {
+            width: CARD_WIDTH - 0.08,
+            height: CARD_DEPTH - 0.08
+        },
+        scene
+    );
+
+    plane.parent = root;
+
+    plane.position.y =
+        CARD_THICKNESS + 0.012;
+
+    plane.rotation.x =
+        Math.PI / 2;
+
+    const texture =
+        createCardTexture(scene, node);
+
+    const mat =
+        new BABYLON.StandardMaterial(
+            `${node.id}_plane_material`,
+            scene
+        );
+
+    mat.diffuseTexture = texture;
+
+    mat.specularColor =
+        BABYLON.Color3.Black();
+
+    plane.material = mat;
+
+    // Guardamos referencias
+    node.card = card;
+    node.plane = plane;
+
+    // ========================================================
+    // DRAG
+    // ========================================================
+
+    makeNodeDraggable(
+        node,
+        root,
+        card,
+        state
+    );
+
+    return node;
+}
+
+// ============================================================
+// EDGES
+// ============================================================
+function createEdge(
+    scene,
+    from,
+    to,
+    index,
+    state
+) {
+
+    const line =
+        BABYLON.MeshBuilder.CreateDashedLines(
+            `edge_${index}`,
+            {
+                points: [
+                    BABYLON.Vector3.Zero(),
+                    BABYLON.Vector3.Zero()
+                ],
+
+                dashSize: 0.25,
+                gapSize: 0.16,
+                dashNb: 30,
+
+                updatable: true
+            },
+            scene
+        );
+
+    line.color =
+        new BABYLON.Color3(
+            0.50,
+            0.56,
+            0.68
+        );
+
+    const label =
+        createEdgeLabel(
+            scene,
+            index
+        );
+
+    const edgeData = {
+        from,
+        to,
+        line,
+        label
+    };
+
+    state.edgeInstances.push(
+        edgeData
+    );
+
+    updateEdge(edgeData);
+}
+
+function createEdgeLabel(
+    scene,
+    index
+) {
+
+    const plane =
+        BABYLON.MeshBuilder.CreatePlane(
+            `edgeLabel_${index}`,
+            {
+                width: 0.52,
+                height: 0.38
+            },
+            scene
+        );
+
+    plane.rotation.x =
+        Math.PI / 2;
+
+    const texture =
+        new BABYLON.DynamicTexture(
+            `edgeLabelTexture_${index}`,
+            {
+                width: 128,
+                height: 96
+            },
+            scene,
+            false
+        );
+
+    texture.hasAlpha = true;
+
+    const ctx =
+        texture.getContext();
+
+    ctx.clearRect(
+        0,
+        0,
+        128,
+        96
+    );
+
+    // ========================================================
+    // BACKGROUND
+    // ========================================================
+
+    ctx.fillStyle =
+        "#F3F5F8";
+
+    roundRect(
+        ctx,
+        8,
+        8,
+        112,
+        80,
+        10
+    );
+
+    ctx.fill();
+
+    // ========================================================
+    // NUMBER
+    // ========================================================
+
+    ctx.fillStyle =
+        "#111827";
+
+    ctx.font =
+        "700 32px Roboto, Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.textBaseline =
+        "middle";
+
+    ctx.fillText(
+        "#" + index,
+        64,
+        48
+    );
+
+    texture.update();
+
+    // ========================================================
+    // MATERIAL
+    // ========================================================
+
+    const mat =
+        new BABYLON.StandardMaterial(
+            `edgeLabelMaterial_${index}`,
+            scene
+        );
+
+    mat.diffuseTexture =
+        texture;
+
+    mat.emissiveColor =
+        new BABYLON.Color3(
+            0.8,
+            0.8,
+            0.8
+        );
+
+    mat.specularColor =
+        BABYLON.Color3.Black();
+
+    plane.material = mat;
+
+    return plane;
+}
+
+function updateConnectedEdges(
+    node,
+    state
+) {
+
+    state.edgeInstances.forEach(
+        edge => {
+
+            if (
+                edge.from === node ||
+                edge.to === node
+            ) {
+                updateEdge(edge);
+            }
+        }
+    );
+}
+
+function createGraphState() {
+    return {
+        nodesById: {},
+        edgeInstances: []
+    };
+}
+
+function getSidePoint(from, to) {
+
+    const dx =
+        to.position.x -
+        from.position.x;
+
+    const dz =
+        to.position.z -
+        from.position.z;
+
+    const absX =
+        Math.abs(dx);
+
+    const absZ =
+        Math.abs(dz);
+
+    let x = 0;
+    let z = 0;
+
+    if (absX > absZ) {
+
+        // Izquierda / derecha
+
+        x =
+            dx > 0
+                ? CARD_WIDTH / 2
+                : -CARD_WIDTH / 2;
+
+        const factor =
+            dz / Math.max(absX, 0.001);
+
+        z =
+            Math.max(
+                -CARD_DEPTH / 2,
+                Math.min(
+                    CARD_DEPTH / 2,
+                    factor * CARD_WIDTH / 2
+                )
+            );
+
+    } else {
+
+        // Frente / atrás
+
+        z =
+            dz > 0
+                ? CARD_DEPTH / 2
+                : -CARD_DEPTH / 2;
+
+        const factor =
+            dx / Math.max(absZ, 0.001);
+
+        x =
+            Math.max(
+                -CARD_WIDTH / 2,
+                Math.min(
+                    CARD_WIDTH / 2,
+                    factor * CARD_DEPTH / 2
+                )
+            );
+    }
+
+    return from.position.add(
+        new BABYLON.Vector3(
+            x,
+            CARD_THICKNESS + 0.08,
+            z
+        )
+    );
+}
+
+function makeNodeDraggable(
+    node,
+    root,
+    card,
+    state
+) {
+
+    const dragBehavior =
+        new BABYLON.PointerDragBehavior({
+            dragPlaneNormal:
+                new BABYLON.Vector3(0, 1, 0)
+        });
+
+    dragBehavior.useObjectOrientationForDragging =
+        false;
+
+    card.addBehavior(dragBehavior);
+
+    dragBehavior.onDragStartObservable.add(() => {
+
+        root.scaling =
+            new BABYLON.Vector3(
+                1.05,
+                1.05,
+                1.05
+            );
+    });
+
+    dragBehavior.onDragObservable.add(() => {
+
+        // Mantener el nodo sobre el plano
+        root.position.y =
+            node.position.y;
+
+        // Actualizar el modelo
+        node.position.copyFrom(
+            root.position
+        );
+
+        // Actualizar todas las aristas conectadas
+        updateConnectedEdges(
+            node,
+            state
+        );
+    });
+
+    dragBehavior.onDragEndObservable.add(() => {
+
+        root.scaling =
+            BABYLON.Vector3.One();
+    });
+}
+function updateEdge(edgeData) {
+
+    const start =
+        getSidePoint(
+            edgeData.from,
+            edgeData.to
+        );
+
+    const end =
+        getSidePoint(
+            edgeData.to,
+            edgeData.from
+        );
+
+    start.y =
+        CARD_THICKNESS + 0.18;
+
+    end.y =
+        CARD_THICKNESS + 0.18;
+
+    BABYLON.MeshBuilder.CreateDashedLines(
+        null,
+        {
+            points: [
+                start,
+                end
+            ],
+
+            instance:
+                edgeData.line
+        }
+    );
+
+    // ========================================================
+    // LABEL
+    // ========================================================
+
+    if (edgeData.label) {
+
+        const center =
+            BABYLON.Vector3.Lerp(
+                start,
+                end,
+                0.5
+            );
+
+        center.y += 0.12;
+
+        edgeData.label.position
+            .copyFrom(center);
+    }
+}
+
+// ============================================================
+// GRID
+// ============================================================
+
+function createGrid(scene) {
+    const lines = [];
+
+    for (let i = -50; i <= 50; i += 2) {
+        lines.push([
+            new BABYLON.Vector3(i, 0, -50),
+            new BABYLON.Vector3(i, 0, 50)
+        ]);
+
+        lines.push([
+            new BABYLON.Vector3(-50, 0, i),
+            new BABYLON.Vector3(50, 0, i)
+        ]);
+    }
+
+    const grid = BABYLON.MeshBuilder.CreateLineSystem(
+        "grid",
+        { lines },
+        scene
+    );
+
+    grid.color = new BABYLON.Color3(0.035, 0.045, 0.065);
+}
+
+// ============================================================
+// UI
+// ============================================================
+
+function createUI(scene) {
+    const ui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(
+        "UI"
+    );
+
+    const title = new BABYLON.GUI.TextBlock();
+    title.text = "SETTLEMENT GRAPH";
+    title.color = "#E8EDF6";
+    title.fontSize = 22;
+    title.width = "420px";
+    title.height = "35px";
+    title.left = "26px";
+    title.top = "22px";
+    title.textHorizontalAlignment =
+        BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    title.verticalAlignment =
+        BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+
+    ui.addControl(title);
+}
+
+// ============================================================
+// DATA
+// ============================================================
+
+function getGraphData() {
+
+    const nodes = [
+
+        {
+            id: "n1",
+            type: "NodeParameterInput",
+            name: "ConceptFilter",
+            property: "Param name",
+            value: "ConceptFilter",
+            description: "Concept name to filter by",
+            metadata: {
+                group: "const:POLYGON",
+                conceptos: "Concept",
+                adInfo: "input:string"
+            },
+            position: new BABYLON.Vector3(-13, 0.35, 4)
+        },
+
+        {
+            id: "n2",
+            type: "NodeFilter",
+            name: "FilterByConcept",
+            property: "Expression",
+            value: "item.Concept == param.ConceptFilter",
+            description: "",
+            metadata: {
+                group: "field",
+                conceptos: "Concept",
+                adInfo: "output:count"
+            },
+            position: new BABYLON.Vector3(-5, 0.35, 4)
+        },
+
+        {
+            id: "n3",
+            type: "NodeAggregate",
+            name: "GroupByPolygon",
+            property: "Group by",
+            value: "PolygonCodeH3R12",
+            description: "",
+            metadata: {
+                group: "const:POLYGON",
+                conceptos: "field:PolygonCodeH3R12",
+                adInfo: "output:count"
+            },
+            position: new BABYLON.Vector3(4, 0.35, 4)
+        },
+
+        {
+            id: "n4",
+            type: "NodeConditional",
+            name: "IsDelivered",
+            property: "Condition",
+            value: "status == Delivered",
+            description: "",
+            metadata: {
+                group: "Shipment",
+                conceptos: "Delivery",
+                adInfo: "boolean"
+            },
+            position: new BABYLON.Vector3(-5, 0.35, -4)
+        },
+
+        {
+            id: "n5",
+            type: "NodeMathOperation",
+            name: "CalculateAmount",
+            property: "Operation",
+            value: "quantity × rate",
+            description: "",
+            metadata: {
+                group: "Pricing",
+                conceptos: "Amount",
+                adInfo: "decimal"
+            },
+            position: new BABYLON.Vector3(4, 0.35, -4)
+        },
+
+        {
+            id: "n6",
+            type: "NodeOutput",
+            name: "Settlement",
+            property: "Output",
+            value: "settlementAmount",
+            description: "",
+            metadata: {
+                group: "Settlement",
+                conceptos: "Settlement",
+                adInfo: "ARS"
+            },
+            position: new BABYLON.Vector3(13, 0.35, 4)
+        }
+    ];
+
+    const edges = [
+        ["n1", "n2"],
+        ["n2", "n3"],
+        ["n2", "n4"],
+        ["n4", "n5"],
+        ["n3", "n5"],
+        ["n5", "n6"]
+    ];
+
+    return { nodes, edges };
+}
+
+function roundRect(
+    ctx,
+    x,
+    y,
+    width,
+    height,
+    radius
+) {
+    ctx.beginPath();
+
+    ctx.moveTo(
+        x + radius,
+        y
+    );
+
+    ctx.lineTo(
+        x + width - radius,
+        y
+    );
+
+    ctx.quadraticCurveTo(
+        x + width,
+        y,
+        x + width,
+        y + radius
+    );
+
+    ctx.lineTo(
+        x + width,
+        y + height - radius
+    );
+
+    ctx.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - radius,
+        y + height
+    );
+
+    ctx.lineTo(
+        x + radius,
+        y + height
+    );
+
+    ctx.quadraticCurveTo(
+        x,
+        y + height,
+        x,
+        y + height - radius
+    );
+
+    ctx.lineTo(
+        x,
+        y + radius
+    );
+
+    ctx.quadraticCurveTo(
+        x,
+        y,
+        x + radius,
+        y
+    );
+
+    ctx.closePath();
+}
+
+// ============================================================
+// MAIN
+// ============================================================
+async function createScene() {
+
+    const scene =
+        createBaseScene(engine);
+
+    createIsometricCamera(
+        scene,
+        canvas
+    );
+
+    createLights(scene);
+    createGrid(scene);
+    createUI(scene);
+
+    const {
+        nodes,
+        edges
+    } = getGraphData();
+
+    // ========================================================
+    // GRAPH STATE
+    // ========================================================
+
+    const state =
+        createGraphState();
+
+    // ========================================================
+    // NODES
+    // ========================================================
+
+    nodes.forEach(node => {
+
+        createNode(
+            scene,
+            node,
+            state
+        );
+    });
+
+    // ========================================================
+    // EDGES
+    // ========================================================
+
+    edges.forEach(
+        ([fromId, toId], index) => {
+
+            const from =
+                state.nodesById[fromId];
+
+            const to =
+                state.nodesById[toId];
+
+            if (!from || !to) {
+                return;
+            }
+
+            createEdge(
+                scene,
+                from,
+                to,
+                index,
+                state
+            );
+        }
+    );
+
+    return scene;
+}
+
+
+export default createScene;
