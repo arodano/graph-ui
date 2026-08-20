@@ -288,6 +288,33 @@
         .pkt-api td { background: #060e14; }
         .api-lbl { font-size: 10px; color: #2a5070; letter-spacing: 1px; }
         .api-val { font-size: 10px; color: #5a9070; white-space: pre-wrap; word-break: break-all; }
+        .pkt-collapsible {
+            margin: 6px 0;
+            border: 1px solid #152030;
+            border-radius: 6px;
+            background: #050b14;
+            overflow: hidden;
+        }
+        .pkt-collapsible summary {
+            cursor: pointer;
+            padding: 6px 10px;
+            background: #091626;
+            border-bottom: 1px solid #152030;
+            user-select: none;
+        }
+        .pkt-mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .pkt-mini-table th,
+        .pkt-mini-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #0d1824;
+            vertical-align: top;
+            text-align: left;
+        }
+        .pkt-mini-table th { color: #2a5070; }
 
         /* ── Debug Footer Panel Styles ── */
         #debug-footer {
@@ -454,6 +481,38 @@
             font-size: 10px;
             line-height: 1.4;
         }
+
+        .debug-json-zone {
+            margin-top: 8px;
+            border: 1px solid #152a42;
+            border-radius: 5px;
+            background: #050c14;
+            overflow: hidden;
+        }
+
+        .debug-json-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #4a90c0;
+            background: #0a1828;
+            border-bottom: 1px solid #152a42;
+            padding: 5px 8px;
+        }
+
+        .debug-entry-request,
+        .debug-entry-data {
+            margin: 0;
+            padding: 8px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+            max-height: 180px;
+            overflow-y: auto;
+            color: #88d8b0;
+        }
         
         .debug-entry-meta {
             display: flex;
@@ -491,7 +550,7 @@
     </style>
 </head>
 <body>
-    <div id="palette">
+    <div id="palette" class="collapsed">
         <button id="palette-toggle-btn" class="side-toggle-btn" title="Collapse/expand left panel">◀</button>
         <div class="pal-header">NODE TYPES</div>
     </div>

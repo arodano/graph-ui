@@ -18,14 +18,74 @@ export const ctx = {
     },
     payableItems: [],
     nodeOutputs:  {},   // nodeId → last debug-node response
+    nodeMeta:     {},   // nodeId → { nodeName, nodeType, at }
     apiBase:      'http://localhost:3002/api/v1/FormulaGraph',
     proxyBase:    'http://localhost:3002',
 };
 
 // ── Debug Functions ──────────────────────────────────────────────────────────
 
+function safeJson(value, maxLen = 3000) {
+    try {
+        const json = JSON.stringify(value, null, 2);
+        if (json.length <= maxLen) return json;
+        return `${json.substring(0, maxLen)}\n... [truncated ${json.length - maxLen} chars]`;
+    } catch {
+        return String(value);
+    }
+}
+
+function isPayableItemVariableNode(node) {
+    const type = String(node?.type || '').toLowerCase();
+    if (!type.includes('variableinput')) return false;
+
+    const fields = [node?.name, node?.property, node?.value, node?.description]
+        .map(v => String(v || '').toLowerCase());
+
+    return fields.some(text =>
+        text.includes('payableitem') ||
+        text.includes('payable item') ||
+        text.includes('payableitems') ||
+        text.includes('payable items')
+    );
+}
+
+function isGuid(value) {
+    return typeof value === 'string' &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+function toUpstreamNodeValueDto(previousResult) {
+    if (previousResult && typeof previousResult === 'object' && previousResult.output && typeof previousResult.output === 'object') {
+        return previousResult.output;
+    }
+    return previousResult;
+}
+
+function createPayableItemsNodeValueDto(items) {
+    return {
+        // ItemStream discriminator (backend NodeValueKind enum)
+        kind: 3,
+        items: Array.isArray(items) ? items : [],
+    };
+}
+
+function buildUpstreamNodeMeta(state, upstreamOutputs) {
+    const meta = {};
+    Object.keys(upstreamOutputs || {}).forEach((nodeId) => {
+        const fromCtx = ctx.nodeMeta?.[nodeId];
+        const fromState = state?.nodesById?.[nodeId];
+        meta[nodeId] = {
+            nodeName: fromCtx?.nodeName || fromState?.name || nodeId,
+            nodeType: fromCtx?.nodeType || fromState?.type || 'Unknown',
+            at: fromCtx?.at || null,
+        };
+    });
+    return meta;
+}
+
 // Función para mostrar respuesta de debug en el panel
-function showDebugResponse(node, result, upstreamOutputs) {
+function showDebugResponse(node, result, upstreamOutputs, requestBody = null) {
     const debugPanel = document.getElementById('debug-panel');
     const debugEmpty = document.getElementById('debug-empty');
     
@@ -66,7 +126,14 @@ function showDebugResponse(node, result, upstreamOutputs) {
             <div class="debug-entry-status ${statusClass}">${statusText}</div>
         </div>
         <div class="debug-entry-content">
-            <pre class="debug-entry-data"></pre>
+            <div class="debug-json-zone">
+                <div class="debug-json-title">REQUEST JSON</div>
+                <pre class="debug-entry-request"></pre>
+            </div>
+            <div class="debug-json-zone">
+                <div class="debug-json-title">RESPONSE JSON</div>
+                <pre class="debug-entry-data"></pre>
+            </div>
         </div>
     `;
     
@@ -86,13 +153,18 @@ function showDebugResponse(node, result, upstreamOutputs) {
     }
     
     // Mostrar datos en el panel
+    const requestData = debugEntry.querySelector('.debug-entry-request');
     const debugData = debugEntry.querySelector('.debug-entry-data');
-    try {
-        const displayResult = hasError ? result : { success: true, ...result };
-        debugData.textContent = JSON.stringify(displayResult, null, 2).substring(0, 3000);
-    } catch (e) {
-        debugData.textContent = String(result);
+    if (requestData) {
+        requestData.textContent = safeJson(requestBody || {
+            formulaId: ctx.formulaId,
+            nodeId: node.id,
+            parameters: ctx.parameters,
+            upstreamOutputs: upstreamOutputs || {}
+        }, 120000);
     }
+    const displayResult = hasError ? result : { success: true, ...result };
+    debugData.textContent = safeJson(displayResult);
     
     // Hacer el header clickeable para expandir/contraer
     const header = debugEntry.querySelector('.debug-entry-header');
@@ -111,7 +183,7 @@ function showDebugResponse(node, result, upstreamOutputs) {
 }
 
 // Función para crear una entrada de debug en estado "cargando"
-function createDebugLoadingEntry(node, upstreamOutputs) {
+function createDebugLoadingEntry(node, upstreamOutputs, requestBody = null) {
     const debugPanel = document.getElementById('debug-panel');
     const debugEmpty = document.getElementById('debug-empty');
     
@@ -150,9 +222,26 @@ function createDebugLoadingEntry(node, upstreamOutputs) {
         </div>
         <div class="debug-entry-content loading">
             <div class="debug-loading-text">Processing debug request for node "${nodeName}"...</div>
-            <pre class="debug-entry-data" style="display: none;"></pre>
+            <div class="debug-json-zone">
+                <div class="debug-json-title">REQUEST JSON</div>
+                <pre class="debug-entry-request"></pre>
+            </div>
+            <div class="debug-json-zone">
+                <div class="debug-json-title">RESPONSE JSON</div>
+                <pre class="debug-entry-data" style="display: none;"></pre>
+            </div>
         </div>
     `;
+
+    const requestData = debugEntry.querySelector('.debug-entry-request');
+    if (requestData) {
+        requestData.textContent = safeJson(requestBody || {
+            formulaId: ctx.formulaId,
+            nodeId: node.id,
+            parameters: ctx.parameters,
+            upstreamOutputs: upstreamOutputs || {}
+        }, 120000);
+    }
     
     // Insertar al inicio del panel
     if (debugPanel.firstChild && debugPanel.firstChild.id !== 'debug-empty') {
@@ -184,7 +273,7 @@ function createDebugLoadingEntry(node, upstreamOutputs) {
 }
 
 // Función para actualizar una entrada de debug existente
-function updateDebugEntry(entryId, result, upstreamOutputs) {
+function updateDebugEntry(entryId, result, upstreamOutputs, requestBody = null) {
     const debugEntry = document.querySelector(`[data-entry-id="${entryId}"]`);
     if (!debugEntry) {
         console.warn(`Debug entry not found: ${entryId}`);
@@ -208,6 +297,7 @@ function updateDebugEntry(entryId, result, upstreamOutputs) {
     const statusEl = debugEntry.querySelector('.debug-entry-status');
     const inputsEl = debugEntry.querySelector('.debug-entry-inputs');
     const loadingText = debugEntry.querySelector('.debug-loading-text');
+    const requestEl = debugEntry.querySelector('.debug-entry-request');
     const dataEl = debugEntry.querySelector('.debug-entry-data');
     const content = debugEntry.querySelector('.debug-entry-content');
     
@@ -217,17 +307,14 @@ function updateDebugEntry(entryId, result, upstreamOutputs) {
         statusEl.className = `debug-entry-status ${statusClass}`;
     }
     if (inputsEl) inputsEl.textContent = `Inputs used: ${inputsCount}`;
+    if (requestEl && requestBody) requestEl.textContent = safeJson(requestBody, 120000);
     
     // Ocultar texto de loading y mostrar datos
     if (loadingText) loadingText.style.display = 'none';
     if (dataEl) {
         dataEl.style.display = 'block';
-        try {
-            const displayResult = hasError ? result : { success: true, ...result };
-            dataEl.textContent = JSON.stringify(displayResult, null, 2).substring(0, 3000);
-        } catch (e) {
-            dataEl.textContent = String(result);
-        }
+        const displayResult = hasError ? result : { success: true, ...result };
+        dataEl.textContent = safeJson(displayResult);
     }
     
     // Auto-expandir si es un error
@@ -271,17 +358,45 @@ export async function callDebugNode(node, state) {
     // Collect outputs from all upstream nodes in the graph
     const upMap = {};
     state.edgeInstances.filter(e => e.to === node)
-        .forEach(e => { if (ctx.nodeOutputs[e.from.id] != null) upMap[e.from.id] = ctx.nodeOutputs[e.from.id]; });
+        .forEach(e => {
+            if (ctx.nodeOutputs[e.from.id] != null) {
+                upMap[e.from.id] = toUpstreamNodeValueDto(ctx.nodeOutputs[e.from.id]);
+            }
+        });
 
-    const upstreamOutputs = Object.keys(upMap).length
-        ? upMap
-        : (ctx.payableItems && ctx.payableItems.length ? ctx.payableItems : {});
+    const hasUpstreamOutputs = Object.keys(upMap).length > 0;
+    const payableItemsNode = isPayableItemVariableNode(node);
+
+    let upstreamOutputs;
+    if (payableItemsNode) {
+        const upstreamKey = isGuid(node?.id)
+            ? node.id
+            : '00000000-0000-0000-0000-000000000000';
+
+        upstreamOutputs = {
+            [upstreamKey]: createPayableItemsNodeValueDto(ctx.payableItems)
+        };
+    } else if (hasUpstreamOutputs) {
+        upstreamOutputs = upMap;
+    } else {
+        upstreamOutputs = {};
+    }
     
     // Asegurar que upstreamOutputs sea un objeto, nunca null
     const safeUpstreamOutputs = upstreamOutputs || {};
+
+    const requestParameters = Array.isArray(ctx.parameters) ? [...ctx.parameters] : [];
     
     // Create loading entry immediately
-    const entryId = createDebugLoadingEntry(node, safeUpstreamOutputs);
+    // Declare request object and timeoutId so they are available across try/catch.
+    const requestBody = {
+        formulaId: ctx.formulaId,
+        nodeId: node.id,
+        parameters: requestParameters,
+        upstreamOutputs: safeUpstreamOutputs,
+    };
+
+    const entryId = createDebugLoadingEntry(node, safeUpstreamOutputs, requestBody);
     if (!entryId) return null;
 
     // Declare timeoutId outside try block so it's available in catch
@@ -291,13 +406,6 @@ export async function callDebugNode(node, state) {
         // Configurar timeout de 30 segundos
         const controller = new AbortController();
         timeoutId = setTimeout(() => controller.abort(), 30000);
-        
-        const requestBody = {
-            formulaId: ctx.formulaId,
-            nodeId: node.id,
-            parameters: ctx.parameters,
-            upstreamOutputs: safeUpstreamOutputs,
-        };
         
         console.log('[debug-node] Sending request:', {
             formulaId: ctx.formulaId,
@@ -334,11 +442,22 @@ export async function callDebugNode(node, state) {
             console.warn(`[debug-node] Non-JSON response from debug-node API:`, responseText.substring(0, 500));
             result = { _error: `Invalid JSON response: ${responseText.substring(0, 100)}` };
         }
+
+        if (result && typeof result === 'object') {
+            result._requestBody = requestBody;
+            result._upstreamNodeMeta = buildUpstreamNodeMeta(state, safeUpstreamOutputs);
+        }
+
+        ctx.nodeMeta[node.id] = {
+            nodeName: node.name || node.id,
+            nodeType: node.type || 'Node',
+            at: new Date().toISOString(),
+        };
         
         ctx.nodeOutputs[node.id] = result;
         
         // Update the debug entry with the result
-        updateDebugEntry(entryId, result, safeUpstreamOutputs);
+        updateDebugEntry(entryId, result, safeUpstreamOutputs, requestBody);
         
         return result;
     } catch (err) {
@@ -356,9 +475,18 @@ export async function callDebugNode(node, state) {
             console.warn(`[debug-node] ${node.name}: Connection refused - API not available`);
             errorResult = { _error: 'Conexión rechazada: La API no está disponible en localhost:5001' };
         }
+
+        errorResult._requestBody = requestBody;
+        errorResult._upstreamNodeMeta = buildUpstreamNodeMeta(state, safeUpstreamOutputs);
+
+        ctx.nodeMeta[node.id] = {
+            nodeName: node.name || node.id,
+            nodeType: node.type || 'Node',
+            at: new Date().toISOString(),
+        };
         
         // Update the debug entry with the error
-        updateDebugEntry(entryId, errorResult, safeUpstreamOutputs);
+        updateDebugEntry(entryId, errorResult, safeUpstreamOutputs, requestBody);
         
         return errorResult;
     }
@@ -613,15 +741,125 @@ export function createSidebar(scene, state, onFormulaSelect, camera) {
         const rawNodes = Array.isArray(formula?.Nodes) ? formula.Nodes : [];
         const rawEdges = Array.isArray(formula?.Edges) ? formula.Edges : [];
 
-        const cols = Math.max(1, Math.ceil(Math.sqrt(rawNodes.length || 1)));
-        const spacingX = 9;
-        const spacingZ = 6;
+        const nodeCount = rawNodes.length;
+        const maxRowsPerType = 20;
+        const spacingX = nodeCount <= 20 ? 8.0 : (nodeCount <= 120 ? 7.5 : 7.0);
+        const spacingZ = nodeCount <= 20 ? 5.2 : (nodeCount <= 120 ? 4.8 : 4.3);
+
+        const edgePairs = rawEdges
+            .filter(e => e.FromNodeId && e.ToNodeId)
+            .map(e => [e.FromNodeId, e.ToNodeId]);
+
+        const inDegree = {};
+        const outMap = {};
+        const inMap = {};
+        rawNodes.forEach(n => {
+            inDegree[n.Id] = 0;
+            outMap[n.Id] = [];
+            inMap[n.Id] = [];
+        });
+
+        edgePairs.forEach(([fromId, toId]) => {
+            if (!(fromId in outMap) || !(toId in inDegree)) return;
+            outMap[fromId].push(toId);
+            inMap[toId].push(fromId);
+            inDegree[toId] += 1;
+        });
+
+        // Left-to-right layering by dependencies using topological traversal.
+        const levelById = {};
+        const queue = [];
+        Object.keys(inDegree).forEach(id => {
+            if (inDegree[id] === 0) {
+                queue.push(id);
+                levelById[id] = 0;
+            }
+        });
+
+        let processed = 0;
+        while (queue.length) {
+            const id = queue.shift();
+            processed += 1;
+            const fromLevel = levelById[id] ?? 0;
+            (outMap[id] || []).forEach(nextId => {
+                levelById[nextId] = Math.max(levelById[nextId] ?? 0, fromLevel + 1);
+                inDegree[nextId] -= 1;
+                if (inDegree[nextId] === 0) queue.push(nextId);
+            });
+        }
+
+        // Fallback for cyclic/unreached nodes: place after max predecessor level.
+        if (processed < rawNodes.length) {
+            for (let pass = 0; pass < rawNodes.length; pass += 1) {
+                rawNodes.forEach(n => {
+                    const preds = inMap[n.Id] || [];
+                    if (!preds.length) {
+                        levelById[n.Id] = levelById[n.Id] ?? 0;
+                        return;
+                    }
+                    const bestPred = preds.reduce((acc, p) => Math.max(acc, levelById[p] ?? 0), 0);
+                    levelById[n.Id] = Math.max(levelById[n.Id] ?? 0, bestPred + 1);
+                });
+            }
+        }
+
+        const layers = new Map();
+        rawNodes.forEach(n => {
+            const level = Math.max(0, levelById[n.Id] ?? 0);
+            if (!layers.has(level)) layers.set(level, []);
+            layers.get(level).push(n);
+        });
+
+        const sortedLevels = Array.from(layers.keys()).sort((a, b) => a - b);
+        const levelCount = sortedLevels.length || 1;
+        const startX = -((levelCount - 1) * spacingX) / 2;
+        const posById = {};
+
+        sortedLevels.forEach((level, levelIndex) => {
+            const layerNodes = layers.get(level) || [];
+            const byType = new Map();
+
+            layerNodes.forEach(n => {
+                const type = mapNodeKindToType(n.NodeKind);
+                if (!byType.has(type)) byType.set(type, []);
+                byType.get(type).push(n);
+            });
+
+            const typeOrder = Array.from(byType.keys()).sort();
+            let rowCursor = 0;
+            const placements = [];
+            let maxLocalCol = 0;
+
+            typeOrder.forEach(type => {
+                const group = byType.get(type).slice().sort((a, b) => String(a.Label || '').localeCompare(String(b.Label || '')));
+                group.forEach((n, idx) => {
+                    const localCol = Math.floor(idx / maxRowsPerType);
+                    const row = rowCursor + (idx % maxRowsPerType);
+                    placements.push({ id: n.Id, row, localCol });
+                    maxLocalCol = Math.max(maxLocalCol, localCol);
+                });
+                rowCursor += Math.min(group.length, maxRowsPerType) + 1;
+            });
+
+            const totalRows = Math.max(1, rowCursor - 1);
+            const xCenter = startX + levelIndex * spacingX;
+
+            placements.forEach(p => {
+                const centeredRow = p.row - (totalRows - 1) / 2;
+                posById[p.id] = new BABYLON.Vector3(
+                    xCenter,
+                    0.35,
+                    -centeredRow * spacingZ
+                );
+            });
+        });
 
         const nodes = rawNodes.map((n, index) => {
             const data = tryParseNodeData(n.NodeData);
             const type = mapNodeKindToType(n.NodeKind);
             const keyNames = Object.keys(data);
             const firstKey = keyNames[0] || 'Data';
+            const fallbackPos = new BABYLON.Vector3(startX + (index % levelCount) * spacingX, 0.35, -Math.floor(index / levelCount) * spacingZ);
 
             return {
                 id: n.Id,
@@ -635,17 +873,11 @@ export function createSidebar(scene, state, onFormulaSelect, camera) {
                     conceptos: '',
                     adInfo: keyNames.join(', ')
                 },
-                position: new BABYLON.Vector3(
-                    -((cols - 1) * spacingX) / 2 + (index % cols) * spacingX,
-                    0.35,
-                    -Math.floor(index / cols) * spacingZ
-                )
+                position: posById[n.Id] || fallbackPos
             };
         });
 
-        const edges = rawEdges
-            .filter(e => e.FromNodeId && e.ToNodeId)
-            .map(e => [e.FromNodeId, e.ToNodeId]);
+        const edges = edgePairs;
 
         return { nodes, edges };
     }
@@ -941,7 +1173,8 @@ export function createSidebar(scene, state, onFormulaSelect, camera) {
         }
     }
     
-    // Auto-load items, formulas, and parameters when sidebar is initialized
+    // Auto-load sidebar data when initialized.
+    // This only loads the formula list; graph remains empty until user selects one.
     loadItems();
     loadFormulas();
     editParameters();

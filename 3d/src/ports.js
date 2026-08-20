@@ -47,5 +47,7 @@ function _createPort(scene, name, node, offsetX, type) {
 
     cyl.metadata = { isPort: true, portType: type, node };
     cap.metadata = { isPort: true, portType: type, node };
+    cyl.renderingGroupId = 1;
+    cap.renderingGroupId = 1;
     return cyl;
 }

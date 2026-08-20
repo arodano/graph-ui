@@ -95,46 +95,128 @@ function _line(a, b, steps = 12) {
     return pts;
 }
 
+function _detachPacketMesh(mesh) {
+    if (!mesh?.parent) return;
+    const abs = mesh.getAbsolutePosition().clone();
+    mesh.parent = null;
+    mesh.position.copyFrom(abs);
+}
+
+function _attachPacketToNodeInput(mesh, node) {
+    if (!mesh || !node?.root || !node?.inputPort) return;
+    mesh.parent = node.root;
+    // Keep packet exactly on the input port so it follows node transforms.
+    mesh.position.copyFrom(node.inputPort.position.clone());
+}
+
+function _clonePacketData(data) {
+    if (typeof structuredClone === 'function') return structuredClone(data);
+    return JSON.parse(JSON.stringify(data));
+}
+
+function _createPacketClone(scene, fromNode, startPos, sourceData) {
+    const mesh = _makeMesh(scene, fromNode, startPos.clone());
+    const packet = {
+        mesh,
+        data: _clonePacketData(sourceData),
+        node: fromNode,
+        _cb: null,
+    };
+    _active.add(packet);
+    return packet;
+}
+
+function _sendPacketToEdge(scene, state, fromNode, packet, edge) {
+    packet._cb = _travel(scene, packet.mesh, edge.curvePoints, EDGE_SPEED, () => {
+        packet._cb = null;
+        const dest = edge.to;
+        _attachPacketToNodeInput(packet.mesh, dest);
+        packet.mesh.metadata = { isPacket: true, packet };
+        dest._packetAtInput = packet;
+        refreshButton(fromNode, state);
+        refreshButton(dest, state);
+    });
+}
+
+function _fanOutPackets(scene, state, fromNode, basePacket, startPos, outEdges) {
+    outEdges.forEach((edge, index) => {
+        const packetForEdge = index === 0
+            ? basePacket
+            : _createPacketClone(scene, fromNode, startPos, basePacket.data);
+        _sendPacketToEdge(scene, state, fromNode, packetForEdge, edge);
+    });
+}
+
+function _toCssColor(color, alpha = 1) {
+    const to255 = (v) => Math.max(0, Math.min(255, Math.round(v * 255)));
+    return `rgba(${to255(color.r)}, ${to255(color.g)}, ${to255(color.b)}, ${alpha})`;
+}
+
 // ── Button canvas drawing ─────────────────────────────────────────────────────
-function _drawBtn(tex, mode) {
+function _drawBtn(tex, mode, nodeColor) {
     const ctx = tex.getContext();
-    ctx.clearRect(0, 0, 128, 128);
-    // Circle background
+    ctx.clearRect(0, 0, 256, 128);
+
+    const bg = _toCssColor(nodeColor, 0.18);
+    const border = _toCssColor(nodeColor, 0.95);
+    const fg = _toCssColor(nodeColor, 1);
+
+    // Badge-like rectangular button, visually aligned with card labels.
+    ctx.fillStyle = bg;
+    ctx.strokeStyle = border;
+    ctx.lineWidth = 3;
+    const x = 6;
+    const y = 12;
+    const w = 244;
+    const h = 104;
+    const r = 14;
     ctx.beginPath();
-    ctx.arc(64, 64, 52, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(6,14,26,0.90)';
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
     ctx.fill();
-    ctx.strokeStyle = mode === 'play' ? '#33AADD' : '#AA55FF';
-    ctx.lineWidth = 5;
     ctx.stroke();
-    // Icon
-    ctx.fillStyle = mode === 'play' ? '#55DDFF' : '#CC88FF';
+
+    // Icon-only badge to match node type tag style.
+    ctx.fillStyle = fg;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     if (mode === 'play') {
         ctx.beginPath();
-        ctx.moveTo(44, 34); ctx.lineTo(94, 64); ctx.lineTo(44, 94);
-        ctx.closePath(); ctx.fill();
+        ctx.moveTo(104, 34);
+        ctx.lineTo(160, 64);
+        ctx.lineTo(104, 94);
+        ctx.closePath();
+        ctx.fill();
     } else {
-        ctx.font = 'bold 72px Arial';
-        ctx.textAlign    = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('↺', 64, 70);
+        ctx.font = "700 60px 'Courier New', monospace";
+        ctx.fillText('↺', 128, 68);
     }
+
     tex.update();
 }
 
 // ── Public: create button mesh parented to node.root ──────────────────────────
 export function addPlayButton(scene, node) {
     const btn = BABYLON.MeshBuilder.CreatePlane(`${node.id}_btn`, {
-        width: 0.52, height: 0.52
+        width: 0.56, height: 0.28
     }, scene);
     btn.parent    = node.root;
     // screen-top (world +Z) and screen-right (world +X) → header top-right
-    btn.position.set(CARD_WIDTH / 2 - 0.55, CARD_THICKNESS + 0.03, CARD_DEPTH / 2 - 0.35);
+    btn.position.set(CARD_WIDTH / 2 - 0.56, CARD_THICKNESS + 0.07, CARD_DEPTH / 2 - 0.35);
     btn.rotation.x = Math.PI / 2;
     btn.isVisible  = false;
+    btn.renderingGroupId = 1;
 
     const tex = new BABYLON.DynamicTexture(`${node.id}_btnTex`,
-        { width: 128, height: 128 }, scene, false);
+        { width: 256, height: 128 }, scene, false);
     tex.hasAlpha = true;
 
     const mat = new BABYLON.StandardMaterial(`${node.id}_btnMat`, scene);
@@ -143,9 +225,14 @@ export function addPlayButton(scene, node) {
     mat.emissiveColor              = BABYLON.Color3.White();
     mat.specularColor              = BABYLON.Color3.Black();
     mat.backFaceCulling            = false;
+    mat.disableLighting            = true;
+    mat.zOffset                    = -2;
     btn.material = mat;
     btn._btnTex  = tex;
     btn.metadata = { isPlayButton: true, node };
+
+    const gl = scene.effectLayers?.find(l => l.name === "glow");
+    if (gl) gl.addExcludedMesh(btn);
 
     node._playBtn = btn;
     return btn;
@@ -167,7 +254,7 @@ export function refreshButton(node, state) {
     if (hasSent && !hasPacketIn)   mode = 'repeat';
 
     btn.isVisible = mode !== 'none';
-    if (btn.isVisible) _drawBtn(btn._btnTex, mode);
+    if (btn.isVisible) _drawBtn(btn._btnTex, mode, NODE_COLORS[node.type] || new BABYLON.Color3(0.30, 0.65, 0.95));
 }
 
 // ── Fire a new packet from a node's output port ───────────────────────────────
@@ -187,17 +274,9 @@ export async function firePacket(scene, node, state) {
     node._lastPacket = packet;
     node._packetSent = true;
 
-    const outEdge = state.edgeInstances.find(e => e.from === node);
-    if (outEdge) {
-        packet._cb = _travel(scene, mesh, outEdge.curvePoints, EDGE_SPEED, () => {
-            packet._cb = null;
-            const dest = outEdge.to;
-            mesh.position.copyFrom(dest.inputPort.getAbsolutePosition().clone());
-            mesh.metadata = { isPacket: true, packet };
-            dest._packetAtInput = packet;
-            refreshButton(node, state);
-            refreshButton(dest, state);
-        });
+    const outEdges = state.edgeInstances.filter(e => e.from === node);
+    if (outEdges.length) {
+        _fanOutPackets(scene, state, node, packet, outPos, outEdges);
     } else {
         mesh.metadata = { isPacket: true, packet };
     }
@@ -219,6 +298,7 @@ export async function processPacket(scene, node, state) {
 
     node._packetAtInput = null;
     node._packetSent    = true;
+    _detachPacketMesh(pkt.mesh);
     pkt.mesh.metadata   = {};
     refreshButton(node, state);
 
@@ -226,19 +306,11 @@ export async function processPacket(scene, node, state) {
     const outPos = node.outputPort.getAbsolutePosition().clone();
 
     pkt._cb = _travel(scene, pkt.mesh, _line(inPos, outPos), CROSS_SPEED, () => {
-        const outEdge = state.edgeInstances.find(e => e.from === node);
-        if (outEdge) {
-            pkt._cb = _travel(scene, pkt.mesh, outEdge.curvePoints, EDGE_SPEED, () => {
-                pkt._cb = null;
-                const dest = outEdge.to;
-                pkt.mesh.position.copyFrom(dest.inputPort.getAbsolutePosition().clone());
-                pkt.mesh.metadata = { isPacket: true, packet: pkt };
-                dest._packetAtInput = pkt;
-                refreshButton(node, state);
-                refreshButton(dest, state);
-            });
+        pkt._cb = null;
+        const outEdges = state.edgeInstances.filter(e => e.from === node);
+        if (outEdges.length) {
+            _fanOutPackets(scene, state, node, pkt, outPos, outEdges);
         } else {
-            pkt._cb = null;
             pkt.mesh.metadata = { isPacket: true, packet: pkt };
             refreshButton(node, state);
         }
@@ -247,6 +319,29 @@ export async function processPacket(scene, node, state) {
 
 // ── Show packet debug panel ───────────────────────────────────────────────────
 export function showPacketPanel(data) {
+    const esc = (value) => String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+
+    const pretty = (value) => {
+        try {
+            return JSON.stringify(value, null, 2);
+        } catch {
+            return String(value);
+        }
+    };
+
+    const stripUiMeta = (apiResult) => {
+        if (!apiResult || typeof apiResult !== 'object') return apiResult;
+        const clean = { ...apiResult };
+        delete clean._requestBody;
+        delete clean._upstreamNodeMeta;
+        return clean;
+    };
+
     document.getElementById('pkt-title').textContent =
         `${data.id}  ·  origin: ${data.originName}  ·  ${data.steps.length} step(s)`;
 
@@ -254,11 +349,62 @@ export function showPacketPanel(data) {
     tbody.innerHTML = '';
     data.steps.forEach((s, i) => {
         const cells = Object.entries(s.data)
-            .map(([k, v]) => `<span class="pk">${k}</span> <span class="pv">${JSON.stringify(v)}</span>`)
+            .map(([k, v]) => `<span class="pk">${esc(k)}</span> <span class="pv">${esc(JSON.stringify(v))}</span>`)
             .join(' &nbsp; ');
-        const apiRow = s.apiResult
-            ? `<tr class="pkt-api"><td></td><td colspan="4"><span class="api-lbl">API →</span> <code class="api-val">${JSON.stringify(s.apiResult)}</code></td></tr>`
-            : '';
+
+        let apiRow = '';
+        if (s.apiResult) {
+            const requestBody = s.apiResult?._requestBody || {};
+            const upstreamOutputs = requestBody?.upstreamOutputs || {};
+            const upstreamMeta = s.apiResult?._upstreamNodeMeta || {};
+            const inputEntries = Object.entries(upstreamOutputs);
+
+            const inputRows = inputEntries.length
+                ? inputEntries.map(([nodeId, nodeValueDto]) => {
+                    const meta = upstreamMeta[nodeId] || {};
+                    const nodeName = meta.nodeName || nodeId;
+                    const nodeType = meta.nodeType || 'Unknown';
+                    const nodeTime = meta.at ? new Date(meta.at).toLocaleTimeString() : '-';
+                    return `
+                        <tr>
+                            <td>${esc(nodeName)}</td>
+                            <td><code class="pt">${esc(String(nodeType).replace('Node', ''))}</code></td>
+                            <td><code class="api-val">${esc(pretty(nodeValueDto))}</code></td>
+                            <td class="pc">${esc(nodeTime)}</td>
+                        </tr>
+                    `;
+                }).join('')
+                : '<tr><td colspan="4" class="pd"><span class="api-lbl">No upstream inputs</span></td></tr>';
+
+            const apiPayload = esc(pretty(stripUiMeta(s.apiResult)));
+
+            apiRow = `
+                <tr class="pkt-api">
+                    <td></td>
+                    <td colspan="4">
+                        <details class="pkt-collapsible">
+                            <summary><span class="api-lbl">INPUTS (outputs del nodo anterior)</span></summary>
+                            <table class="pkt-mini-table">
+                                <thead>
+                                    <tr>
+                                        <th>Node</th>
+                                        <th>Type</th>
+                                        <th>Data</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${inputRows}</tbody>
+                            </table>
+                        </details>
+                        <details class="pkt-collapsible">
+                            <summary><span class="api-lbl">API</span></summary>
+                            <code class="api-val">${apiPayload}</code>
+                        </details>
+                    </td>
+                </tr>
+            `;
+        }
+
         tbody.insertAdjacentHTML('beforeend',
             `<tr>
                 <td class="pc">${i + 1}</td>

@@ -12,6 +12,8 @@ export function createEdge(scene, from, to, index, state) {
     }, scene);
     line.color                 = new BABYLON.Color3(0.22, 0.34, 0.50);
     line.intersectionThreshold = 0.15;
+    line.renderingGroupId      = 0;
+    line.visibility            = 0.42;
 
     const label    = _createEdgeLabel(scene, index);
     const flowDots = _createFlowDots(scene, index, NODE_COLORS[from.type]);
@@ -158,6 +160,8 @@ function _createEdgeLabel(scene, index) {
     mat.specularColor   = BABYLON.Color3.Black();
     mat.backFaceCulling = false;
     plane.material      = mat;
+    plane.renderingGroupId = 0;
+    plane.visibility = 0.72;
     return plane;
 }
 
@@ -170,6 +174,8 @@ function _createFlowDots(scene, index, color) {
         mat.emissiveColor   = color;
         mat.disableLighting = true;
         sphere.material     = mat;
+        sphere.renderingGroupId = 0;
+        sphere.visibility = 0.68;
         return { mesh: sphere, offset };
     });
 }

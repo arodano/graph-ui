@@ -1,7 +1,6 @@
 import { createBaseScene, createLights, createGrid, createGlowLayer, createGroundPlane } from "./scene.js";
 import { createIsometricCamera, playIntroAnimation }                                       from "./camera.js";
 import { createUI }                                                                        from "./ui.js";
-import { getGraphData }                                                                    from "./data.js";
 import { buildGraph, addNewEdge, rebuildGraph }                                            from "./graph.js";
 import { setupEdgeCreation, setupEdgeSelection, setupNodeSelection,
          setupPacketInteraction }                                                           from "./interactions.js";
@@ -20,7 +19,7 @@ createGroundPlane(scene);
 createGrid(scene);
 createUI(scene);
 
-const state = buildGraph(scene, getGraphData());
+const state = buildGraph(scene, { nodes: [], edges: [] });
 
 setupEdgeCreation(scene, state, (from, to) => addNewEdge(scene, state, from, to));
 setupEdgeSelection(scene, state);
@@ -136,7 +135,9 @@ if (sidebarPanel && sidebarToggleBtn) {
 
 refreshSidePanelToggleIcons();
 
-playIntroAnimation(camera, scene);
+if (Object.keys(state.nodesById || {}).length > 0) {
+    playIntroAnimation(camera, scene);
+}
 
 engine.runRenderLoop(() => scene.render());
 window.addEventListener("resize", () => engine.resize());

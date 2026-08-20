@@ -3,6 +3,39 @@ import { createNode }                   from "./nodes.js";
 import { TYPE_META }                    from "./config.js";
 import { refreshButton, disposeAllPackets } from "./packets.js";
 
+function ensureGridFitsGraph(scene, state) {
+    const nodes = Object.values(state.nodesById || {});
+    let maxAbsX = 0;
+    let maxAbsZ = 0;
+
+    nodes.forEach(node => {
+        const pos = node?.root?.position || node?.position;
+        if (!pos) return;
+        maxAbsX = Math.max(maxAbsX, Math.abs(pos.x || 0));
+        maxAbsZ = Math.max(maxAbsZ, Math.abs(pos.z || 0));
+    });
+
+    const margin = 12;
+    const targetHalf = Math.max(50, Math.ceil((Math.max(maxAbsX, maxAbsZ) + margin) / 2) * 2);
+
+    const existingGrid = scene.getMeshByName("grid");
+    const currentHalf = Number(existingGrid?.metadata?.halfExtent || 0);
+    if (existingGrid && currentHalf === targetHalf) return;
+
+    if (existingGrid) existingGrid.dispose();
+
+    const lines = [];
+    for (let i = -targetHalf; i <= targetHalf; i += 2) {
+        lines.push([new BABYLON.Vector3(i, 0, -targetHalf), new BABYLON.Vector3(i, 0, targetHalf)]);
+        lines.push([new BABYLON.Vector3(-targetHalf, 0, i), new BABYLON.Vector3(targetHalf, 0, i)]);
+    }
+
+    const grid = BABYLON.MeshBuilder.CreateLineSystem("grid", { lines }, scene);
+    grid.color = new BABYLON.Color3(0.035, 0.045, 0.065);
+    grid.isPickable = false;
+    grid.metadata = { halfExtent: targetHalf };
+}
+
 export function buildGraph(scene, graphData) {
     const state = createGraphState();
     const { nodes, edges } = graphData;
@@ -15,6 +48,7 @@ export function buildGraph(scene, graphData) {
     });
     // Show play buttons on source nodes (no incoming edges)
     nodes.forEach(n => refreshButton(state.nodesById[n.id], state));
+    ensureGridFitsGraph(scene, state);
     return state;
 }
 
@@ -34,6 +68,7 @@ export function addNewNode(scene, state, type, position) {
         position:    new BABYLON.Vector3(position.x, 0.35, position.z)
     };
     createNode(scene, node, state);
+    ensureGridFitsGraph(scene, state);
     return node;
 }
 
@@ -71,5 +106,6 @@ export function rebuildGraph(scene, state, graphData) {
         if (from && to) createEdge(scene, from, to, index, state);
     });
     nodes.forEach(n => refreshButton(state.nodesById[n.id], state));
+    ensureGridFitsGraph(scene, state);
     return state;
 }

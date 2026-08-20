@@ -109,6 +109,15 @@ export function createNode(scene, node, state) {
         [box, slabH, slabHB, slabV, slabVB, face].forEach(m => gl.addExcludedMesh(m));
     }
 
+    // Keep nodes visually above edge lines.
+    [box, slabH, slabHB, slabV, slabVB, face].forEach(m => {
+        m.renderingGroupId = 1;
+    });
+    const cornerMeshes = scene.meshes.filter(m => m.name.startsWith(`${node.id}_corner`));
+    cornerMeshes.forEach(m => {
+        m.renderingGroupId = 1;
+    });
+
     node.root = root;
     node.face = face;
     state.nodesById[node.id] = node;
